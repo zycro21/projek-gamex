@@ -1,0 +1,65 @@
+body {
+  margin: 0; /* Menghapus margin default */
+  overflow: hidden; /* Mencegah scroll */
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Center horizontally */
+  justify-content: center; /* Center vertically */
+  height: 100vh; /* Full height to center vertically */
+  background-color: #f9f9f9; /* Optional background color */
+}
+
+form {
+  border: 1px solid #ccc; /* Small border around the form */
+  padding: 20px; /* Adjusted padding */
+  border-radius: 8px; /* Rounded corners for the border */
+  width: 300px; /* Fixed width for the form */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for depth */
+  background-color: #fff; /* Changed to white for better contrast */
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+}
+
+input {
+  margin-bottom: 15px; /* Space between inputs */
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px; /* Rounded corners for inputs */
+  width: 100%; /* Full width for inputs */
+  box-sizing: border-box; /* Include padding and border in input's total width */
+}
+
+.password-container {
+  position: relative; /* Position relative to allow absolute positioning of the button */
+}
+
+.toggle-password {
+  position: absolute; /* Position the button inside the input */
+  right: 10px; /* Adjust to position inside the input */
+  top: 50%; /* Center vertically */
+  transform: translateY(-50%); /* Adjust for vertical centering */
+  background: none; /* Remove default button styling */
+  border: none; /* Remove border */
+  cursor: pointer; /* Change cursor to pointer */
+  outline: none; /* Remove outline */
+}
+
+button {
+  padding: 10px;
+  background-color: #4CAF50; /* Green background */
+  color: white; /* White text */
+  border: none; /* Remove border */
+  border-radius: 4px; /* Rounded corners for button */
+  cursor: pointer; /* Pointer cursor on hover */
+  width: 100%; /* Full width for button */
+}
+
+button:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+p {
+  margin-top: 15px; /* Space above the paragraph */
+}

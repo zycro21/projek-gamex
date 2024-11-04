@@ -1,0 +1,44 @@
+.sidebar {
+    position: fixed; /* Memastikan sidebar tetap di tempat saat scroll */
+    top: 0;
+    left: 0; /* Menempelkan sidebar ke sisi kiri */
+    width: 250px; /* Lebar sidebar */
+    height: 100%; /* Mengisi tinggi layar */
+    background-color: #2c3e50; /* Warna latar belakang sidebar */
+    color: white; /* Warna teks */
+    padding: 20px; /* Ruang dalam */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Memberi bayangan */
+  }
+  
+  .sidebar-logo {
+    display: flex;
+    justify-content: center; /* Memusatkan logo */
+    margin-bottom: 20px; /* Jarak antara logo dan navigasi */
+  }
+  
+  .sidebar .logo {
+    max-width: 100%; /* Memastikan logo tidak melampaui batas */
+    height: auto; /* Memastikan proporsi logo tetap */
+  }
+  
+  nav ul {
+    list-style-type: none; /* Menghapus tanda bullet */
+    padding: 0; /* Menghapus padding */
+  }
+  
+  nav ul li {
+    margin: 10px 0; /* Jarak antar item navigasi */
+  }
+  
+  nav ul li a {
+    color: white; /* Warna tautan */
+    text-decoration: none; /* Menghapus garis bawah */
+    display: block; /* Membuat tautan sebagai blok agar mudah diklik */
+    padding: 10px; /* Ruang dalam untuk tautan */
+    border-radius: 4px; /* Membuat sudut sedikit membulat */
+    transition: background-color 0.3s; /* Efek transisi saat hover */
+  }
+  
+  nav ul li a:hover {
+    background-color: #34495e; /* Warna latar belakang saat hover */
+  }
