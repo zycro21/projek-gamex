@@ -25,3 +25,8 @@ Pastikan Anda sudah menginstal Node.js, MySQL, dan NPM di lingkungan Anda.
    git clone https://github.com/username/game-x.git
    cd game-x
    ```
+2. __Set Up BackEnd__
+   - Pindah ke direktori `server_backend`:
+   ```
+   cd server_backend
+   ```
