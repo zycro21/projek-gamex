@@ -31,6 +31,8 @@ input {
   box-sizing: border-box; /* Include padding and border in input's total width */
 }
 
+
+
 .password-container {
   position: relative; /* Position relative to allow absolute positioning of the button */
 }
@@ -46,8 +48,20 @@ input {
   outline: none; /* Remove outline */
 }
 
+.container-forgotpass {
+  margin-top: 5px;
+}
+
+.forgotPassword {
+  margin-top: -10px;
+  display: flex;
+  justify-content: flex-end;
+  
+}
+
 button {
   padding: 10px;
+  margin-top: 0px;
   background-color: #4CAF50; /* Green background */
   color: white; /* White text */
   border: none; /* Remove border */

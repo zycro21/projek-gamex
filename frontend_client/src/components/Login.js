@@ -1,24 +1,27 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom"; // Ganti useHistory dengan useNavigate
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/Login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
-  const navigate = useNavigate(); // Inisialisasi useNavigate untuk navigasi
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/admin/admins/login", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "http://localhost:5000/admin/admins/login",
+        {
+          email,
+          password,
+        }
+      );
       setMessage(response.data.message);
-      localStorage.setItem("token", response.data.token); // Simpan token ke local storage
-      navigate("/dashboard"); // Redirect ke halaman dashboard setelah login berhasil
+      localStorage.setItem("token", response.data.token);
+      navigate("/dashboard");
     } catch (error) {
       setMessage(error.response.data.message || "Error occurred");
     }
@@ -42,7 +45,15 @@ const Login = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <button type="submit">Login</button>
+        <div className="container-forgotpass">
+          <p className="forgotPassword">
+            Lupa password?&nbsp;&nbsp;
+            <Link to="/forgot-password">Klik di sini</Link>
+          </p>
+        </div>
+        <div className="container-login">
+          <button type="submit">Login</button>
+        </div>
       </form>
       {message && <p>{message}</p>}
       <p>

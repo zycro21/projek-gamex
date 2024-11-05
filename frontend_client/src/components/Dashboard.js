@@ -43,21 +43,26 @@ const Dashboard = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    const { userId, email, username } = selectedUser;
+    const { user_id, email, username } = selectedUser;
+    console.log("Updating user with ID:", user_id); // Logging userId
     try {
       const token = localStorage.getItem("token");
-      await axios.put(
-        `http://localhost:5000/admin/users/${userId}`,
+      const response = await axios.put(
+        `http://localhost:5000/admin/users/${user_id}`,
         { email, username },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
+      console.log("Update response:", response.data); // Logging response
       fetchUsers(); // Refresh the user list
       setMessage("User updated successfully");
       setSelectedUser({});
     } catch (error) {
-      console.error("Error updating user:", error); // Tambahkan ini untuk logging
+      console.error(
+        "Error updating user:",
+        error.response ? error.response.data : error.message
+      );
       setMessage("Error updating user");
     }
   };

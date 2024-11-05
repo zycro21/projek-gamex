@@ -63,7 +63,7 @@ router.post(
       const [admins] = await db.query(sql, [email]);
 
       if (admins.length === 0) {
-        return res.status(404).json({ message: "Admin tidak ditemukan" });
+        return res.status(404).json({ message: "User tidak ditemukan" });
       }
 
       const admin = admins[0];
@@ -153,7 +153,7 @@ router.get("/users/profile", verifyAdminRole, async (req, res) => {
 // Update data user dengan role "user"
 router.put(
   "/users/:userId",
-  verifyAdminRole, // Pastikan hanya admin yang bisa mengakses
+  verifyAdminRole,
   [
     body("email").optional().isEmail().withMessage("Format email tidak valid"),
     body("username")
@@ -175,16 +175,21 @@ router.put(
     const { email, username, password } = req.body;
 
     try {
-      // Fetch existing user data to verify they are a regular user
+      // Fetch existing user data
       const [users] = await db.query(
-        "SELECT role FROM users WHERE user_id = ? AND role = 'user'",
+        "SELECT role FROM users WHERE user_id = ?",
         [userId]
       );
 
+      // Cek apakah pengguna ditemukan
       if (users.length === 0) {
-        return res
-          .status(404)
-          .json({ message: "User tidak ditemukan atau bukan role 'user'" });
+        return res.status(404).json({ message: "User tidak ditemukan" });
+      }
+
+      // Jika role pengguna yang diupdate bukan 'user', bisa mengizinkan update
+      // Hanya admin yang bisa update pengguna yang bukan 'user'
+      if (users[0].role !== "user" && req.user.role !== "admin") {
+        return res.status(403).json({ message: "Akses ditolak" });
       }
 
       // Update user data
@@ -215,11 +220,12 @@ router.put(
 
       const sql = `UPDATE users SET ${updateFields.join(
         ", "
-      )} WHERE user_id = ? AND role = 'user'`;
+      )} WHERE user_id = ?`;
       await db.query(sql, params);
 
       res.json({ message: "Data user berhasil diperbarui" });
     } catch (error) {
+      console.error("Error during update:", error); // Tambahkan log untuk debugging
       res.status(500).send(error);
     }
   }

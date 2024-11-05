@@ -1,44 +1,91 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bungee&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
 .sidebar {
-    position: fixed; /* Memastikan sidebar tetap di tempat saat scroll */
-    top: 0;
-    left: 0; /* Menempelkan sidebar ke sisi kiri */
-    width: 250px; /* Lebar sidebar */
-    height: 100%; /* Mengisi tinggi layar */
-    background-color: #2c3e50; /* Warna latar belakang sidebar */
-    color: white; /* Warna teks */
-    padding: 20px; /* Ruang dalam */
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Memberi bayangan */
-  }
-  
-  .sidebar-logo {
-    display: flex;
-    justify-content: center; /* Memusatkan logo */
-    margin-bottom: 20px; /* Jarak antara logo dan navigasi */
-  }
-  
-  .sidebar .logo {
-    max-width: 100%; /* Memastikan logo tidak melampaui batas */
-    height: auto; /* Memastikan proporsi logo tetap */
-  }
-  
-  nav ul {
-    list-style-type: none; /* Menghapus tanda bullet */
-    padding: 0; /* Menghapus padding */
-  }
-  
-  nav ul li {
-    margin: 10px 0; /* Jarak antar item navigasi */
-  }
-  
-  nav ul li a {
-    color: white; /* Warna tautan */
-    text-decoration: none; /* Menghapus garis bawah */
-    display: block; /* Membuat tautan sebagai blok agar mudah diklik */
-    padding: 10px; /* Ruang dalam untuk tautan */
-    border-radius: 4px; /* Membuat sudut sedikit membulat */
-    transition: background-color 0.3s; /* Efek transisi saat hover */
-  }
-  
-  nav ul li a:hover {
-    background-color: #34495e; /* Warna latar belakang saat hover */
-  }
+  font-family: "Bebas Neue", sans-serif;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 225px !important;
+  height: 100%;
+  /* background-color: #2c3e50; */
+  padding: 10px 20px;
+  /* box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); */
+}
+
+.sidebar-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.sidebar-logo .logo {
+  width: 125px; /* Atur ukuran logo */
+  height: auto;
+  margin-top: -20px;
+  padding-right: 5px;
+}
+
+nav {
+  max-height: calc(
+    100% - 60px
+  ); /* Atur tinggi maksimum agar tidak melebihi sidebar */
+  overflow-y: auto; /* Tambahkan scroll jika konten lebih tinggi dari tinggi maksimum */
+  scrollbar-width: thin; /* Untuk Firefox, membuat scrollbar menjadi lebih tipis */
+  scrollbar-color: transparent transparent; /* Untuk Firefox, membuat scrollbar tidak terlihat */
+  margin-top: -30px;
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+nav ul li {
+  /* background-color: red; */
+  display: block;
+  /* align-items: center;
+  justify-content: flex-start; */
+  padding-left: 15px;
+  margin: 5px 0;
+  border-radius: 10px;
+}
+
+.menu-icon {
+  width: 21px; /* Atur lebar ikon */
+  height: 21px; /* Atur tinggi ikon */
+  margin-right: 30px; /* Jarak antara ikon dan teks */
+  margin-left: -10px; /* Menjorokkan ikon lebih ke kiri */
+}
+
+nav ul li a {
+  display: flex;
+  align-items: center;
+  font-family: "Poppins", sans-serif;
+  color: #a9a9a9 !important;
+  text-decoration: none;
+  padding: 10px 20px; /* Beri padding lebih lebar */
+  border-radius: 2px;
+  transition: background-color 0.3s, color 0.3s;
+  font-size: 13px;
+}
+
+.logoutcontainer {
+  margin-top: auto; /* Menggunakan auto untuk mendorong Logout ke bawah */
+  margin-bottom: 10px; /* Jarak dari bagian bawah sidebar */
+}
+
+nav ul li:hover {
+  background-color: #b0c4de; /* Ubah warna latar belakang menjadi biru tua */
+}
+
+
+nav ul li a.active {
+  color: #0d47a1 !important; /* Ubah warna teks menjadi biru donker saat aktif */
+  /* background-color: red; */
+}
+nav ul li a:hover {
+  color: #ecf0f1 !important; 
+};
