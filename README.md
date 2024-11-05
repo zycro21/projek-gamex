@@ -26,7 +26,35 @@ Pastikan Anda sudah menginstal Node.js, MySQL, dan NPM di lingkungan Anda.
    cd game-x
    ```
 2. __Set Up BackEnd__
-   - Pindah ke direktori `server_backend`:
+   * Pindah ke direktori `server_backend`:
    ```
    cd server_backend
    ```
+   * Install dependencies :
+   ```
+   npm install
+   ```
+   * Atur konfigurasi database di file `.env` dan jalankan server backend
+   ```
+   npm start
+   ```
+3. __Set Up FrontEnd__
+   * Pindah ke direktori `server_client` :
+   ```
+   cd ../server_client
+   ```
+   * Install dependencies :
+   ```
+   npm install
+   ```
+   * Jalankan aplikasi React
+   ```
+   npm start
+   ```
+
+### Struktur Folder
+- `server_client` : Berisi source code untuk frontend aplikasi (React).
+- `server_backend` : Berisi source code untuk backend aplikasi (Node.js dan Express).
+
+## Kontribusi
+Jika Anda ingin melakukan pengembangan sendiri pada Game-X, Anda dipersilakan untuk fork repository ini dan membuat perubahan sesuai kebutuhan Anda. Terima kasih telah tertarik pada proyek ini!
