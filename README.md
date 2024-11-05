@@ -41,7 +41,7 @@ Pastikan Anda sudah menginstal Node.js, MySQL, dan NPM di lingkungan Anda.
 3. __Set Up FrontEnd__
    * Pindah ke direktori `server_client` :
    ```
-   cd ../server_client
+   cd ../frontend_client
    ```
    * Install dependencies :
    ```
@@ -53,7 +53,7 @@ Pastikan Anda sudah menginstal Node.js, MySQL, dan NPM di lingkungan Anda.
    ```
 
 ### Struktur Folder
-- `server_client` : Berisi source code untuk frontend aplikasi (React).
+- `frontend_client` : Berisi source code untuk frontend aplikasi (React).
 - `server_backend` : Berisi source code untuk backend aplikasi (Node.js dan Express).
 
 ## Kontribusi
