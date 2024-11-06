@@ -1,9 +1,15 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../styles/sidebar.css";
 
 const Sidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
 
   return (
     <div className="sidebar">
@@ -108,16 +114,17 @@ const Sidebar = () => {
             </Link>
           </li>
           <li className="logoutcontainer">
-            <div className="logout-wrapper">
-              <Link to="/login">
-                <img
-                  src="/logo-logout.png"
-                  alt="Logo LogOut"
-                  className="menu-icon"
-                ></img>
-                Logout
-              </Link>
-            </div>
+            <Link
+              to="/login"
+              onClick={handleLogout}
+            >
+              <img
+                src="/logo-logout.png"
+                alt="Logo LogOut"
+                className="menu-icon"
+              ></img>
+              Logout
+            </Link>
           </li>
         </ul>
       </nav>

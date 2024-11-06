@@ -21,7 +21,7 @@ const Login = () => {
       );
       setMessage(response.data.message);
       localStorage.setItem("token", response.data.token);
-      navigate("/dashboard");
+      navigate("/users");
     } catch (error) {
       setMessage(error.response.data.message || "Error occurred");
     }

@@ -6,10 +6,11 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 225px !important;
-  height: 100%;
-  /* background-color: #2c3e50; */
+  width: 200px !important;
+  height: 100vh;
+  background-color: #f8f9fa;
   padding: 10px 20px;
+  border-right: 1px solid #ccc; 
   /* box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); */
 }
 
@@ -17,6 +18,7 @@
   display: flex;
   justify-content: center;
   margin-bottom: 10px;
+  text-align: center;
 }
 
 .sidebar-logo .logo {
@@ -49,7 +51,7 @@ nav ul li {
   /* align-items: center;
   justify-content: flex-start; */
   padding-left: 15px;
-  margin: 5px 0;
+  margin: 10px 0;
   border-radius: 10px;
 }
 
@@ -70,7 +72,9 @@ nav ul li a {
   border-radius: 2px;
   transition: background-color 0.3s, color 0.3s;
   font-size: 13px;
+  font-weight: bold;
 }
+
 
 .logoutcontainer {
   margin-top: auto; /* Menggunakan auto untuk mendorong Logout ke bawah */

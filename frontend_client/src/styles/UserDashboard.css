@@ -1,0 +1,157 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bungee&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+.dashboard-container {
+  font-family: "Poppins", sans-serif;
+  display: flex; /* Mengatur layout menjadi flex */
+  margin-top: 0px;
+  margin-right: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  padding-right: 20px;
+  height: 100vh;
+  /* background-color: blueviolet; */
+}
+
+.main-content {
+  margin-left: 270px; /* Menyisakan ruang untuk sidebar */
+  padding: 10px;
+  padding-top: 0px;
+  background-color: #f8f9fa;
+  border-radius: 20px;
+  flex-grow: 1; /* Mengisi sisa ruang */
+  z-index: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  height: calc(100vh - 20px);
+}
+
+.user-table {
+  width: 100%; /* Lebar tabel penuh */
+  border-collapse: collapse; /* Menghilangkan ruang antara sel */
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.user-table thead {
+  position: sticky;
+  top: 0;
+  background-color: #f8f9fa;
+  z-index: 1;
+}
+
+.user-table th,
+.user-table td {
+  border: none; /* Garis border */
+  padding: 10px; /* Ruang dalam sel */
+  text-align: left; /* Rata kiri */
+  border-bottom: 1px solid #ccc;
+}
+
+.user-table .role-column {
+  text-align: start; /* Rata tengah secara horizontal */
+  vertical-align: middle; /* Rata tengah secara vertikal */
+}
+
+/* Gaya untuk tampilan role badge */
+.role-badge {
+  padding: 5px 10px;
+  color: white;
+  border-radius: 4px;
+  font-weight: bold;
+  display: inline-block;
+  text-transform: capitalize; /* Mengubah teks ke format kapital */
+}
+
+/* Warna berdasarkan role */
+.role-badge.user {
+  background-color: #218838;
+}
+
+.role-badge.admin {
+  background-color: #007bff;
+}
+
+.role-badge.superadmin {
+  background-color: #dc3545;
+}
+
+/* Menyelaraskan tombol secara horizontal */
+.action-buttons {
+  display: flex;
+  gap: 10px; /* Jarak antar tombol */
+}
+
+/* Gaya untuk tombol Edit */
+.edit-button {
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.edit-button:hover {
+  background-color: #0056b3;
+}
+
+/* Gaya untuk tombol Delete */
+.delete-button {
+  padding: 8px 12px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}
+
+/* Pop-up styles */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10; 
+}
+
+.popup-content {
+  background: white;
+  padding: 20px;
+  padding-top: 0px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tulisanpopup {
+  font-size: 15px;
+  font-family: "Poppins", sans-serif;
+}
+
+button {
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.cancel-button {
+  background-color: red;
+  color: white;
+}
+
+.update-button,
+.confirm-button {
+  margin-bottom: 10px;
+  background-color: green;
+  color: white;
+} 

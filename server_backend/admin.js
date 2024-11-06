@@ -97,7 +97,7 @@ router.get("/users", verifyAdminRole, async (req, res) => {
   // Middleware diterapkan di sini
   try {
     const sql =
-      "SELECT user_id, email, username, created_at FROM users WHERE role = 'user'";
+      "SELECT user_id, email, username, created_at, role FROM users";
     const [users] = await db.query(sql);
     res.json(users);
   } catch (error) {
