@@ -92,12 +92,23 @@ router.post(
   }
 );
 
-// Endpoint untuk melihat semua akun dengan role 'user'
+// Endpoint untuk melihat semua akun dengan role 'user' dan sorting username
 router.get("/users", verifyAdminRole, async (req, res) => {
-  // Middleware diterapkan di sini
+  // Ambil parameter sort dari query, jika ada
+  const { sort } = req.query;
+
+  // Default sort SQL statement
+  let sql =
+    "SELECT user_id, email, username, created_at, role FROM users WHERE role IN ('user', 'admin')";
+
+  // Tambahkan pengurutan sesuai parameter 'sort'
+  if (sort === "asc") {
+    sql += " ORDER BY username ASC";
+  } else if (sort === "desc") {
+    sql += " ORDER BY username DESC";
+  }
+
   try {
-    const sql =
-      "SELECT user_id, email, username, created_at, role FROM users";
     const [users] = await db.query(sql);
     res.json(users);
   } catch (error) {

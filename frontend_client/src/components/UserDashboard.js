@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Sidebar from "./sidebar";
 import "../styles/UserDashboard.css";
@@ -7,7 +6,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const UsersDashboard = () => {
-  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState({});
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
@@ -63,11 +61,6 @@ const UsersDashboard = () => {
     } catch (error) {
       toast.error("Error updating user");
     }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
   };
 
   return (
