@@ -18,7 +18,7 @@ router.post(
       .notEmpty()
       .withMessage("Deskripsi game tidak boleh kosong"),
     body("price")
-      .isFloat({ gt: 0 })
+      .isFloat({ min: 0 })
       .withMessage("Harga game harus lebih besar dari 0"),
     body("platform").custom((value) => {
       const validPlatforms = [
@@ -119,13 +119,63 @@ router.post(
   }
 );
 
-// Endpoint untuk mendapatkan semua game
+// Endpoint untuk mendapatkan semua game dan Fitur Filter dengan Pagination otomatis
 router.get("/getGames", verifyAdminRole, async (req, res) => {
+  const { genre, platform, sort, page = 1, limit = 16 } = req.query; // Page dan limit selalu otomatis ada
+  const offset = (page - 1) * limit; // Menghitung offset untuk pagination
+
   try {
-    const sql = "SELECT * FROM games";
-    const [games] = await db.query(sql);
-    res.json(games);
+    let sql = "SELECT * FROM games";
+    let params = [];
+
+    // Menambahkan filter untuk genre
+    if (genre) {
+      const genres = genre.split(",").map((item) => `%${item.trim()}%`);
+      const genreConditions = genres.map(() => "genre LIKE ?").join(" OR ");
+      sql += ` WHERE (${genreConditions})`;
+      params = params.concat(genres);
+    }
+
+    // Menambahkan filter untuk platform
+    if (platform) {
+      const platforms = platform.split(",").map((item) => `%${item.trim()}%`);
+      const platformConditions = platforms
+        .map(() => "platform LIKE ?")
+        .join(" OR ");
+      sql += genre
+        ? ` AND (${platformConditions})`
+        : ` WHERE (${platformConditions})`;
+      params = params.concat(platforms);
+    }
+
+    // Menambahkan pengurutan berdasarkan abjad
+    if (sort === "title") {
+      sql += " ORDER BY title ASC";
+    } else if (sort === "title_desc") {
+      sql += " ORDER BY title DESC";
+    }
+
+    // Menambahkan pagination
+    sql += " LIMIT ? OFFSET ?";
+    params.push(parseInt(limit), offset);
+
+    const [games] = await db.query(sql, params);
+
+    // Menangani kasus jika genre atau platform tidak ditemukan
+    if (games.length === 0) {
+      let message = "Genre atau platform tidak ditemukan";
+      if (genre && !platform) message = "Genre tidak ditemukan";
+      if (!genre && platform) message = "Platform tidak ditemukan";
+      return res.status(404).json({ message });
+    }
+
+    res.json({
+      currentPage: parseInt(page),
+      perPage: parseInt(limit),
+      games, // Menampilkan hasil game untuk halaman saat ini
+    });
   } catch (error) {
+    console.error("Terjadi kesalahan:", error);
     res.status(500).json({ message: "Terjadi kesalahan pada server" });
   }
 });
