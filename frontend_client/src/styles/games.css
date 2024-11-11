@@ -1,0 +1,56 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bungee&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+.games-dashboard {
+  padding: 20px;
+  height: 100vh; /* Memastikan seluruh halaman bisa discroll */
+  overflow-y: auto; /* Memungkinkan scroll vertikal jika konten melebihi ukuran layar */
+}
+
+.game-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px; /* Mengurangi jarak antar card */
+  margin-bottom: 20px;
+  margin-left: 250px;
+}
+
+.game-card {
+  border: 1px solid #ccc;
+  border-radius: 8px; /* Radius yang lebih kecil */
+  padding: 8px; /* Mengurangi padding */
+  text-align: center;
+  height: 180px; /* Menentukan tinggi card */
+  background-color: #f1f1f1; /* Mengubah warna latar belakang card */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.game-card img {
+  width: 50%;
+  height: 120px; /* Membuat gambar memiliki tinggi yang konsisten */
+  object-fit: contain; /* Menjaga gambar tetap proporsional dan tidak terpotong */
+  border-radius: 6px; /* Radius gambar yang lebih kecil */
+  margin-bottom: 8px; /* Memberikan jarak antara gambar dan teks */
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+}

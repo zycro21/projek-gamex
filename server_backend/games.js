@@ -4,8 +4,24 @@ const { body, validationResult } = require("express-validator");
 const db = require("./db");
 const { verifyAdminRole } = require("./auth/authAdmin"); // Middleware untuk verifikasi admin
 const multer = require("multer");
-const upload = multer({ dest: "uploads/" });
+const path = require("path");
 const fs = require("fs");
+
+// Konfigurasi penyimpanan file dengan Multer
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads");
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    cb(
+      null,
+      file.fieldname + "-" + uniqueSuffix + path.extname(file.originalname)
+    );
+  },
+});
+
+const upload = multer({ storage: storage });
 
 // Endpoint untuk menambah game baru
 router.post(
@@ -72,7 +88,7 @@ router.post(
 
     const { title, description, price, platform, genre, release_date } =
       req.body;
-    const image = req.file ? req.file.path : null;
+    const image = req.file ? req.file.filename : null; // Ambil hanya nama file
 
     try {
       // Memastikan platform dan genre dikirim sebagai string yang dipisahkan koma
@@ -96,15 +112,14 @@ router.post(
         platformValue, // Platform dikirim sebagai string yang dipisahkan koma
         genreValue, // Genre dikirim sebagai string yang dipisahkan koma
         release_date,
-        image,
+        image, // Simpan nama file saja di database
       ]);
 
-      // Jika berhasil, kirim response sukses
       res.status(201).json({ message: "Game berhasil ditambahkan" });
     } catch (error) {
       // Jika terjadi kesalahan, hapus file gambar yang sudah diupload
       if (image) {
-        fs.unlink(image, (err) => {
+        fs.unlink(path.join(__dirname, "uploads", image), (err) => {
           if (err) {
             console.error("Gagal menghapus file gambar:", err);
           } else {
@@ -120,7 +135,7 @@ router.post(
 );
 
 // Endpoint untuk mendapatkan semua game dan Fitur Filter dengan Pagination otomatis
-router.get("/getGames", verifyAdminRole, async (req, res) => {
+router.get("/", verifyAdminRole, async (req, res) => {
   const { genre, platform, sort, page = 1, limit = 16 } = req.query; // Page dan limit selalu otomatis ada
   const offset = (page - 1) * limit; // Menghitung offset untuk pagination
 
@@ -204,7 +219,7 @@ router.get("/getGames/:gameId", verifyAdminRole, async (req, res) => {
 router.put(
   "/updateGames/:gameId",
   verifyAdminRole,
-  upload.single("image"), // Menggunakan multer untuk menangani satu file 'image'
+  upload.single("image"),
   [
     body("title")
       .optional()
@@ -221,51 +236,47 @@ router.put(
     body("platform")
       .optional()
       .custom((value) => {
-        if (value) {
-          const validPlatforms = [
-            "Personal Computer (PC)",
-            "Console",
-            "Handheld Game Consoles",
-            "Mobile Devices",
-            "Virtual Reality (VR)",
-          ];
-          const platforms = value.split(",").map((item) => item.trim());
-          platforms.forEach((platform) => {
-            if (!validPlatforms.includes(platform)) {
-              throw new Error(`Platform '${platform}' tidak valid`);
-            }
-          });
-        }
+        const validPlatforms = [
+          "Personal Computer (PC)",
+          "Console",
+          "Handheld Game Consoles",
+          "Mobile Devices",
+          "Virtual Reality (VR)",
+        ];
+        const platforms = value.split(",").map((item) => item.trim());
+        platforms.forEach((platform) => {
+          if (!validPlatforms.includes(platform)) {
+            throw new Error(`Platform '${platform}' tidak valid`);
+          }
+        });
         return true;
       }),
     body("genre")
       .optional()
       .custom((value) => {
-        if (value) {
-          const validGenres = [
-            "Real-Time Strategy",
-            "Multiplayer Online Battle Arena",
-            "Shooter",
-            "Role Playing Game",
-            "Sandbox",
-            "Simulation",
-            "Racing",
-            "Sports",
-            "Fighting",
-            "Action-Adventure",
-            "Survival Horror",
-            "Puzzler",
-            "Rhythm Game",
-            "Interactive Movie",
-            "Platformer",
-          ];
-          const genres = value.split(",").map((item) => item.trim());
-          genres.forEach((genre) => {
-            if (!validGenres.includes(genre)) {
-              throw new Error(`Genre '${genre}' tidak valid`);
-            }
-          });
-        }
+        const validGenres = [
+          "Real-Time Strategy",
+          "Multiplayer Online Battle Arena",
+          "Shooter",
+          "Role Playing Game",
+          "Sandbox",
+          "Simulation",
+          "Racing",
+          "Sports",
+          "Fighting",
+          "Action-Adventure",
+          "Survival Horror",
+          "Puzzler",
+          "Rhythm Game",
+          "Interactive Movie",
+          "Platformer",
+        ];
+        const genres = value.split(",").map((item) => item.trim());
+        genres.forEach((genre) => {
+          if (!validGenres.includes(genre)) {
+            throw new Error(`Genre '${genre}' tidak valid`);
+          }
+        });
         return true;
       }),
     body("release_date")
@@ -282,13 +293,13 @@ router.put(
     const { gameId } = req.params;
     const { title, description, price, platform, genre, release_date } =
       req.body;
-    const image = req.file ? req.file.path : null;
+    const image = req.file ? req.file.filename : null; // Hanya nama file jika ada
 
     try {
       let updateFields = [];
       let params = [];
 
-      // Periksa gambar lama di database
+      // Cek gambar lama
       const [existingGame] = await db.query(
         "SELECT image FROM games WHERE game_id = ?",
         [gameId]
@@ -334,7 +345,7 @@ router.put(
         params.push(image);
       }
 
-      params.push(gameId); // Menambahkan gameId di akhir untuk klausa WHERE
+      params.push(gameId);
 
       if (updateFields.length === 0) {
         return res.status(400).json({ message: "Tidak ada data yang diubah" });
@@ -345,9 +356,9 @@ router.put(
       )} WHERE game_id = ?`;
       await db.query(sql, params);
 
-      // Jika ada gambar lama dan gambar baru diupload, hapus gambar lama
+      // Jika ada gambar lama dan baru diupload, hapus gambar lama
       if (oldImage && image && oldImage !== image) {
-        fs.unlink(oldImage, (err) => {
+        fs.unlink(path.join(__dirname, "uploads", oldImage), (err) => {
           if (err) {
             console.error("Gagal menghapus file gambar lama:", err);
           } else {
@@ -358,9 +369,9 @@ router.put(
 
       res.json({ message: "Data game berhasil diperbarui" });
     } catch (error) {
-      // Jika terjadi kesalahan, hapus file gambar yang sudah diupload
+      // Jika terjadi error, hapus file gambar baru
       if (image) {
-        fs.unlink(image, (err) => {
+        fs.unlink(path.join(__dirname, "uploads", image), (err) => {
           if (err) {
             console.error("Gagal menghapus file gambar:", err);
           } else {

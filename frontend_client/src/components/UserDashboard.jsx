@@ -12,10 +12,6 @@ const UsersDashboard = () => {
   const [userToDelete, setUserToDelete] = useState(null);
   const [isUpdatePopupOpen, setIsUpdatePopupOpen] = useState(false);
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -27,6 +23,10 @@ const UsersDashboard = () => {
       toast.error("Error fetching users");
     }
   };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
   const handleDelete = async (userId) => {
     try {

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // Ga
 import Register from "./components/Register";
 import Login from "./components/Login";
 import UsersDashboard from "./components/UserDashboard";
+import GamesDashboard from "./components/games";
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
         <Route path="/register" element={<Register />} /> {/* Gunakan element sebagai prop */}
         <Route path="/login" element={<Login />} />
         <Route path="/users" element={<UsersDashboard />} />
+        <Route path="/games" element={<GamesDashboard />} />
         <Route path="/" element={<Login />} /> {/* Default ke login */}
       </Routes>
     </Router>

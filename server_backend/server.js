@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const path = require("path");
 const userRoutes = require('./user'); // Mengimpor file user.js
 const adminRoutes = require('./admin');
 const superadminRoutes = require('./superadmin');
@@ -19,11 +20,11 @@ app.get('/', (req, res) => {
     res.send('API Berhasil Diakses');
 });
 
-// Menggunakan route dari user.js
-app.use('/api', userRoutes);
+// app.use('/api', userRoutes);
 app.use('/admin', adminRoutes);          
 app.use('/superadmin', superadminRoutes);
 app.use('/games', gamesRoutes);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
