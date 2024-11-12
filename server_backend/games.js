@@ -134,7 +134,6 @@ router.post(
   }
 );
 
-// Endpoint untuk mendapatkan semua game dan Fitur Filter dengan Pagination otomatis
 router.get("/", verifyAdminRole, async (req, res) => {
   const { genre, platform, sort, page = 1, limit = 16 } = req.query; // Page dan limit selalu otomatis ada
   const offset = (page - 1) * limit; // Menghitung offset untuk pagination
@@ -170,7 +169,11 @@ router.get("/", verifyAdminRole, async (req, res) => {
       sql += " ORDER BY title DESC";
     }
 
-    // Menambahkan pagination
+    // Query untuk mengambil total data
+    const [totalData] = await db.query("SELECT COUNT(*) AS total FROM games");
+    const totalGames = totalData[0].total; // Total jumlah game tanpa filter
+
+    // Menambahkan pagination ke query
     sql += " LIMIT ? OFFSET ?";
     params.push(parseInt(limit), offset);
 
@@ -184,31 +187,17 @@ router.get("/", verifyAdminRole, async (req, res) => {
       return res.status(404).json({ message });
     }
 
+    // Menghitung total halaman berdasarkan total data
+    const totalPages = Math.ceil(totalGames / limit);
+
+    // Mengirimkan response dengan informasi pagination
     res.json({
       currentPage: parseInt(page),
       perPage: parseInt(limit),
+      totalGames, // Total jumlah game yang ada di database
+      totalPages, // Total halaman yang dapat diakses
       games, // Menampilkan hasil game untuk halaman saat ini
     });
-  } catch (error) {
-    console.error("Terjadi kesalahan:", error);
-    res.status(500).json({ message: "Terjadi kesalahan pada server" });
-  }
-});
-
-// Endpoint untuk mendapatkan game berdasarkan ID
-router.get("/getGames/:gameId", verifyAdminRole, async (req, res) => {
-  const { gameId } = req.params;
-
-  try {
-    const sql = "SELECT * FROM games WHERE game_id = ?";
-    const [game] = await db.query(sql, [gameId]);
-
-    // Jika game tidak ditemukan
-    if (game.length === 0) {
-      return res.status(404).json({ message: "Game tidak ditemukan" });
-    }
-
-    res.json(game[0]); // Mengirimkan data game satuan
   } catch (error) {
     console.error("Terjadi kesalahan:", error);
     res.status(500).json({ message: "Terjadi kesalahan pada server" });

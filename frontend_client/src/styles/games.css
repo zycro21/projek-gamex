@@ -2,43 +2,156 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
 
 .games-dashboard {
-  padding: 20px;
-  height: 100vh; /* Memastikan seluruh halaman bisa discroll */
-  overflow-y: auto; /* Memungkinkan scroll vertikal jika konten melebihi ukuran layar */
+  font-family: "Poppins", sans-serif;
+  padding-top: 5px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  height: 100vh;
+  overflow-y: auto;
+  /* background-color: red; */
+}
+
+.title-container {
+  margin-left: 260px;
+  /* background-color: blue; */
+}
+
+.title {
+  color: #4682b4;
+}
+
+.main-content-games {
+  margin-left: 250px; /* Menyisakan ruang untuk sidebar */
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
+  padding-bottom: 0px;
+  /* background-color: #f8f9fa; */
+  border-radius: 20px;
+  flex-grow: 1; /* Mengisi sisa ruang */
+  z-index: 1;
+  overflow-y: auto;
+  scrollbar-width: none;
+  height: calc(100vh - 20px);
+  border-color: black;
+  background-color: #f8f9fa;
 }
 
 .game-cards {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 15px; /* Mengurangi jarak antar card */
-  margin-bottom: 20px;
-  margin-left: 250px;
+  /* grid-template-rows: repeat(4, auto); */
+  gap: 20px; /* Jarak antar kolom */
+  row-gap: 0px; /* Mengurangi jarak antar card */
+  margin-bottom: 0px;
+  /* margin: 15px; */
+  /* background-color: greenyellow; */
 }
 
 .game-card {
   border: 1px solid #ccc;
   border-radius: 8px; /* Radius yang lebih kecil */
-  padding: 8px; /* Mengurangi padding */
+  padding: 20px; /* Mengurangi padding */
   text-align: center;
-  height: 180px; /* Menentukan tinggi card */
+  height: 250px; /* Menentukan tinggi card */
   background-color: #f1f1f1; /* Mengubah warna latar belakang card */
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-bottom: 20px;
+  background-color: #44b8c4;
 }
 
-.game-card img {
-  width: 50%;
-  height: 120px; /* Membuat gambar memiliki tinggi yang konsisten */
-  object-fit: contain; /* Menjaga gambar tetap proporsional dan tidak terpotong */
-  border-radius: 6px; /* Radius gambar yang lebih kecil */
-  margin-bottom: 8px; /* Memberikan jarak antara gambar dan teks */
+.image-game {
+  width: 100%; /* Gambar memenuhi lebar container */
+  height: auto; /* Tinggi otomatis mengikuti rasio gambar */
+  aspect-ratio: 16 / 9; /* Sesuaikan dengan rasio yang diinginkan, misalnya 16:9 */
+  object-fit: contain; /* Gambar tetap proporsional tanpa terpotong */
+  border-radius: 6px; /* Radius untuk sudut gambar */
+  margin-bottom: 10px; /* Jarak antara gambar dan teks */
+  margin-top: 10px;
+  /* box-sizing: content-box; */
+  box-shadow: 0 0 10px 4px rgba(#b0e0e6, 0.15), 0 0 15px 5px rgba(#b0e0e6, 0.1);
+  transform: translateY(0);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* background-color: red; */
+}
+
+.image-game:hover {
+  transform: translateY(-8px);
+  border-radius: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3), 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.title-game {
+  font-weight: bold;
+  font-size: 14px;
+  color: #e6f0fa;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.price-game {
+  margin-top: -10px;
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #e6f0fa;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.button-container-game {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5px;
+}
+
+.button-container-game button {
+  width: 45%;
+  padding: 5px;
+  border: none; /* Menghilangkan border default */
+  border-radius: 15px; /* Radius sudut tombol */
+  cursor: pointer; /* Menampilkan cursor pointer saat hover */
+  font-size: 14px; /* Ukuran font */
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Transisi untuk efek hover */
+  white-space: nowrap; /* Menghindari pemotongan teks */
+  /* background-color: red; */
+}
+
+.edit-button-game {
+  background-color: #007bff; /* Warna latar belakang hijau untuk Edit */
+  color: white; /* Warna teks putih */
+}
+
+.delete-button-game {
+  background-color: #f44336; /* Warna latar belakang merah untuk Delete */
+  color: white; /* Warna teks putih */
+}
+
+/* Efek hover pada tombol */
+button:hover {
+  transform: scale(1.05); /* Memperbesar tombol sedikit saat hover */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Menambahkan bayangan */
+}
+
+/* Efek ketika tombol diklik */
+button:active {
+  transform: scale(0.98); /* Menyusutkan tombol sedikit saat diklik */
+}
+
+.main-content-games-2 {
+  margin-left: 250px;
 }
 
 .pagination {
   display: flex;
   justify-content: center;
   margin-top: 20px;
+}
+
+.pagination .active {
+  background-color: #007bff;
+  color: white;
 }
 
 .pagination button {

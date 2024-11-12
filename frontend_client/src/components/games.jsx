@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from "react-router-dom"; // Add useLocation here
 import axios from "axios";
 import Sidebar from "./sidebar";
 import "../styles/games.css"; // Your custom CSS styles
@@ -10,6 +10,15 @@ const GamesDashboard = () => {
   const [games, setGames] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [gamesPerPage] = useState(16); // 4x4 cards per page
+  const [totalGames, setTotalGames] = useState(0); // Total jumlah data games
+  const [totalPages, setTotalPages] = useState(0); // Total halaman
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const pageFromURL = parseInt(queryParams.get("page") || 1, 10);
+  const limitFromURL = parseInt(queryParams.get("limit") || 16, 10);
+
   const [newGame, setNewGame] = useState({
     title: "",
     genre: "",
@@ -17,36 +26,48 @@ const GamesDashboard = () => {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [currentGameId, setCurrentGameId] = useState(null);
-  const navigate = useNavigate();
 
-
-  const fetchGames = async () => {
+  // Fetch games function
+  const fetchGames = async (page = currentPage) => {
     try {
-      const response = await axios.get("http://localhost:5000/games", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      setGames(response.data.games); 
-    console.log(response.data.games);
+      const response = await axios.get(
+        `http://localhost:5000/games?page=${page}&limit=${gamesPerPage}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      console.log("API Response:", response.data);
+      setGames(response.data.games);
+      setTotalGames(response.data.totalGames);
+      setTotalPages(response.data.totalPages);
     } catch (error) {
-        console.error("Error fetching games:", error.response ? error.response.data : error.message);
+      console.error(
+        "Error fetching games:",
+        error.response ? error.response.data : error.message
+      );
     }
   };
 
   useEffect(() => {
-    fetchGames();
-  }, []);
+    if (pageFromURL !== currentPage) {
+      setCurrentPage(pageFromURL);
+    } else {
+      fetchGames(pageFromURL);
+    }
+  }, [location.search]);
+
+  useEffect(() => {
+    console.log("Current Page:", currentPage);
+    fetchGames(currentPage); // Fetch games when currentPage changes
+  }, [currentPage]);
 
   // Pagination Logic
-  const indexOfLastGame = currentPage * gamesPerPage;
-  const indexOfFirstGame = indexOfLastGame - gamesPerPage;
-  const currentGames = games.slice(indexOfFirstGame, indexOfLastGame);
-
-  const totalPages = Math.ceil(games.length / gamesPerPage);
-
   const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
+    console.log("Page changed to:", pageNumber);
+    setCurrentPage(pageNumber); // Update state currentPage
+    navigate(`/games?page=${pageNumber}&limit=${gamesPerPage}`); // Update URL
   };
 
   const handleGameChange = (e) => {
@@ -136,67 +157,92 @@ const GamesDashboard = () => {
     }
   };
 
+  function formatPrice(price) {
+    return price <= 0 ? "FREE" : `Rp${Math.floor(price).toLocaleString("id-ID")}`;
+  }
+
   return (
     <div className="games-dashboard">
       <Sidebar />
-      <h1>Games Dashboard</h1>
-
-      <div className="game-cards">
-        {currentGames.map((game) => (
-          <div className="game-card" key={game._id}>
-            <img
-              src={`http://localhost:5000/uploads/${game.image}`}
-              alt={game.title}
-            />
-            <h3>{game.title}</h3>
-            <p>{game.genre}</p>
-            <button onClick={() => handleEditGame(game._id)}>Edit</button>
-            <button onClick={() => handleDeleteGame(game._id)}>Delete</button>
-          </div>
-        ))}
+      <div className="title-container">
+        <h1 className="title">GAMES DASHBOARD</h1>
+      </div>
+      <div className="main-content-games">
+        <div className="game-cards">
+          {games.map((game) => (
+            <div className="game-card" key={game._id}>
+              <img
+                className="image-game"
+                src={`http://localhost:5000/uploads/${game.image}`}
+                alt={game.title}
+              />
+              <p className="title-game">{game.title}</p>
+              <p className="price-game">{formatPrice(game.price)}</p>
+              <div className="button-container-game">
+                <button
+                  className="edit-button-game"
+                  onClick={() => handleEditGame(game._id)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="delete-button-game"
+                  onClick={() => handleDeleteGame(game._id)}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="pagination">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-        >
-          Previous
-        </button>
-        {[...Array(totalPages)].map((_, index) => (
-          <button key={index} onClick={() => handlePageChange(index + 1)}>
-            {index + 1}
+      <div className="main-content-games-2">
+        <div className="pagination">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+          >
+            Previous
           </button>
-        ))}
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-        >
-          Next
-        </button>
-      </div>
+          {[...Array(totalPages)].map((_, index) => (
+            <button
+              key={index}
+              onClick={() => handlePageChange(index + 1)}
+              className={currentPage === index + 1 ? "active" : ""}
+            >
+              {index + 1}
+            </button>
+          ))}
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+          >
+            Next
+          </button>
+        </div>
 
-      <h2>{isEditing ? "Edit Game" : "Add New Game"}</h2>
-      <form onSubmit={isEditing ? handleUpdateGame : handleAddGame}>
-        <input
-          type="text"
-          name="title"
-          placeholder="Game Title"
-          value={newGame.title}
-          onChange={handleGameChange}
-          required
-        />
-        <input
-          type="text"
-          name="genre"
-          placeholder="Game Genre"
-          value={newGame.genre}
-          onChange={handleGameChange}
-          required
-        />
-        <input type="file" name="image" onChange={handleFileChange} />
-        <button type="submit">{isEditing ? "Update Game" : "Add Game"}</button>
-      </form>
+        <h2>{isEditing ? "Edit Game" : "Add New Game"}</h2>
+        <form onSubmit={isEditing ? handleUpdateGame : handleAddGame}>
+          <input
+            type="text"
+            name="title"
+            value={newGame.title}
+            onChange={handleGameChange}
+            placeholder="Game Title"
+          />
+          <input
+            type="text"
+            name="genre"
+            value={newGame.genre}
+            onChange={handleGameChange}
+            placeholder="Game Genre"
+          />
+          <input type="file" onChange={handleFileChange} />
+          <button type="submit">{isEditing ? "Update" : "Add"}</button>
+        </form>
+      </div>
+      <ToastContainer />
     </div>
   );
 };

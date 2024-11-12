@@ -66,6 +66,9 @@ const UsersDashboard = () => {
   return (
     <div className="dashboard-container">
       <Sidebar />
+      <div className="title-container-user">
+        <h1 className="title-user">USER DASHBOARD</h1>
+      </div>
       <div className="main-content">
         <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
 

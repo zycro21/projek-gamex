@@ -3,14 +3,23 @@
 
 .dashboard-container {
   font-family: "Poppins", sans-serif;
-  display: flex; /* Mengatur layout menjadi flex */
   margin-top: 0px;
   margin-right: 20px;
   padding-top: 20px;
   padding-bottom: 20px;
   padding-right: 20px;
   height: 100vh;
-  /* background-color: blueviolet; */
+  overflow-y: auto;
+}
+
+.title-container-user {
+  /* background-color: red; */
+  margin-top: -20px;
+  margin-left: 280px;
+}
+
+.title-user {
+  color: #4682b4;
 }
 
 .main-content {
@@ -20,10 +29,11 @@
   background-color: #f8f9fa;
   border-radius: 20px;
   flex-grow: 1; /* Mengisi sisa ruang */
-  z-index: 1;
+  /* z-index: 1; */
   overflow-y: auto;
   scrollbar-width: thin;
   height: calc(100vh - 20px);
+  /* background-color: blueviolet; */
 }
 
 .user-table {
