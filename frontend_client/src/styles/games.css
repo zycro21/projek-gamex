@@ -14,13 +14,64 @@
 
 .title-container {
   margin-left: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 30px;
   /* background-color: blue; */
 }
 
 .title {
+  font-size: 24px;
+  font-weight: bold;
   color: #4682b4;
 }
 
+.add-game-button {
+  background-color: #007bff; /* Warna latar tombol */
+  color: white; /* Warna ikon */
+  border: none;
+  padding: 5px; /* Padding untuk tombol */
+  border-radius: 50%; /* Buat tombol bulat */
+  cursor: pointer;
+  font-size: 14px; /* Ukuran font untuk ikon */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px; /* Lebar tombol */
+  height: 30px; /* Tinggi tombol */
+  transition: width 0.3s ease;
+  position: relative; /* Agar ikon dan teks dapat diposisikan dengan benar */
+}
+
+.add-game-button:hover {
+  background-color: #0056b3; /* Warna saat hover */
+  width: 200px;
+}
+
+.icon {
+  font-size: 14px;
+  visibility: visible; /* Pastikan ikon tetap terlihat */
+  opacity: 1; /* Ikon tetap terlihat */
+}
+
+.button-text-add-games {
+  opacity: 0; /* Buat teks sepenuhnya transparan */
+  margin-left: 5px;
+  white-space: nowrap; /* Agar teks tetap satu baris */
+  transition: opacity 0.3s ease; /* Animasi kemunculan teks */
+  visibility: hidden; /* Sembunyikan teks secara visual */
+  position: absolute; /* Posisi teks dipisah dari ikon */
+}
+
+.add-game-button:hover .button-text-add-games {
+  opacity: 1; /* Tampilkan teks saat dihover */
+  visibility: visible; /* Pastikan teks terlihat saat dihover */
+  margin-left: 15px; /* Jarak antara ikon dan teks saat dihover */
+  position: relative; /* Posisikan teks relatif terhadap tombol */
+}
 .main-content-games {
   margin-left: 250px; /* Menyisakan ruang untuk sidebar */
   padding-left: 20px;
@@ -139,8 +190,115 @@ button:active {
   transform: scale(0.98); /* Menyusutkan tombol sedikit saat diklik */
 }
 
+.modal-games-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-games-content {
+  background: #fff;
+  width: 80%;
+  max-width: 420px;
+  max-height: 80vh; /* Batas tinggi modal */
+  overflow-y: auto; /* Tambahkan scroll vertikal */
+  scrollbar-width: thin;
+  padding-left: 20px;
+  padding-right: 0px;
+  padding-bottom: 15px;
+  padding-top: 0px;
+  border-radius: 8px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+  /* background-color: red; */
+}
+
+.form-edit-games {
+  /* background-color: blue; */
+  width: 95%;
+  margin-top: -5px;
+  padding-top: 10px;
+  padding-left: 15px;
+}
+
+form label {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 5px; /* Spasi antara label dan textarea */
+}
+
+form textarea,
+form input[type="text"],
+form input[type="number"],
+form input[type="date"],
+form input[type="file"] {
+  display: block;
+  width: 100%; /* Lebar penuh agar sejajar */
+  margin-bottom: 15px; /* Spasi bawah antar input */
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Maksimal 4 kolom per baris */
+  gap: 20px; /* Spasi antara checkbox */
+  padding: 0px;
+  max-width: 500px;
+}
+
+.grid-item {
+  display: flex;
+  align-items: center;
+}
+
+.modal-game-edit-buttons {
+  display: flex;
+  gap: 1rem; /* Jarak antar tombol */
+  justify-content: center; /* Menyusun tombol di tengah secara horizontal */
+  margin-top: 1rem; /* Jarak atas */
+}
+
+.edit-game-btn {
+  padding: 0.5rem 1.5rem; /* Padding untuk ukuran tombol */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, color 0.3s ease; /* Efek transisi */
+}
+
+.confirm-edit-game-btn {
+  background-color: #4caf50; /* Warna awal untuk Confirm */
+  color: white;
+}
+
+.confirm-edit-game-btn:hover {
+  background-color: #45a049; /* Warna saat hover untuk Confirm */
+}
+
+.cancel-edit-game-btn {
+  background-color: #f44336; /* Warna awal untuk Cancel */
+  color: white;
+}
+
+.cancel-edit-game-btn:hover {
+  background-color: #d32f2f; /* Warna saat hover untuk Cancel */
+}
+
+.edit-game-btn:active {
+  transform: scale(0.98); /* Efek saat tombol dipencet */
+  opacity: 0.9;
+}
+
 .main-content-games-2 {
   margin-left: 250px;
+  /* background-color: red; */
+  padding-bottom: 50px;
 }
 
 .pagination {

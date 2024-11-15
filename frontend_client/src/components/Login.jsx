@@ -14,16 +14,15 @@ const Login = () => {
     try {
       const response = await axios.post(
         "http://localhost:5000/admin/admins/login",
+        { email, password },
         {
-          email,
-          password,
+          withCredentials: true, // Mengizinkan pengiriman cookies di permintaan
         }
       );
       setMessage(response.data.message);
-      localStorage.setItem("token", response.data.token);
       navigate("/users");
     } catch (error) {
-      setMessage(error.response.data.message || "Error occurred");
+      setMessage(error.response?.data?.message || "Error occurred");
     }
   };
 

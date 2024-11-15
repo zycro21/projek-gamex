@@ -42,7 +42,7 @@ router.post(
   }
 );
 
-// Contoh untuk login admin
+// Login admin
 router.post(
   "/admins/login",
   [
@@ -73,6 +73,7 @@ router.post(
         return res.status(401).json({ message: "Email atau Password Salah" });
       }
 
+      // Buat token JWT
       const token = jwt.sign(
         {
           userId: admin.user_id,
@@ -84,7 +85,15 @@ router.post(
         { expiresIn: "1h" }
       );
 
-      res.status(200).json({ message: "Login Berhasil", token });
+      // Simpan token di dalam httpOnly cookie
+      res.cookie("token", token, {
+        httpOnly: true,
+        secure: false, // Aktifkan hanya jika menggunakan HTTPS
+        sameSite: "Strict", // Melindungi dari serangan CSRF
+        maxAge: 3600000, // 1 jam
+      });
+
+      res.status(200).json({ message: "Login Berhasil" });
     } catch (error) {
       console.error("Error selama login admin:", error);
       res.status(500).json({ message: "Terjadi kesalahan pada server" });
@@ -242,24 +251,20 @@ router.put(
   }
 );
 
-// Endpoint untuk menghapus akun dengan role 'user'
-router.delete("/users/:userId", verifyAdminRole, async (req, res) => {
-  // Middleware diterapkan di sini
-  const { userId } = req.params;
-
+// Endpoint untuk logout admin atau user dengan menghapus cookie token
+router.post("/logout", (req, res) => {
   try {
-    const sql = "DELETE FROM users WHERE user_id = ? AND role = 'user'";
-    const [result] = await db.query(sql, [userId]);
+    // Hapus cookie dengan nama token
+    res.clearCookie("token", {
+      httpOnly: true, // Menjaga agar cookie tidak dapat diakses melalui JavaScript di sisi klien
+      secure: true, // Pastikan cookie hanya dikirim melalui HTTPS (aktifkan ini jika menggunakan HTTPS)
+      sameSite: "Strict", // Mencegah cookie dikirimkan ke situs lain
+    });
 
-    if (result.affectedRows === 0) {
-      return res
-        .status(404)
-        .json({ message: "User tidak ditemukan atau bukan role 'user'" });
-    }
-
-    res.json({ message: "User berhasil dihapus" });
+    res.json({ message: "Logout berhasil, token dihapus dari cookie" });
   } catch (error) {
-    res.status(500).send(error);
+    console.error("Error saat logout:", error);
+    res.status(500).json({ message: "Terjadi kesalahan saat logout" });
   }
 });
 

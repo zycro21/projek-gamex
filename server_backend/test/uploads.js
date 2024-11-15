@@ -15,17 +15,16 @@ async function findOrphanedFiles() {
 
     // Step 3: Pastikan format path file yang disimpan di database menggunakan pemisah direktori yang benar
     const filesInDatabase = results.map((row) => {
-      // Jika row.image adalah buffer, ubah menjadi string
-      if (Buffer.isBuffer(row.image)) {
-        const imagePath = row.image.toString("utf-8"); // Mengonversi Buffer ke string
-        return imagePath.replace(/uploads[\/\\]/, "").replace(/\\/g, "/"); // Menghapus 'uploads/' dan menormalisasi path
-      } else {
-        console.log(
-          "Ditemukan data bukan Buffer di column 'image':",
-          row.image
-        );
-        return ""; // Mengembalikan string kosong jika bukan buffer
+      // Jika row.image bukan buffer, anggap saja itu string path file
+      let imagePath = row.image;
+
+      // Jika data berupa buffer, ubah menjadi string
+      if (Buffer.isBuffer(imagePath)) {
+        imagePath = imagePath.toString("utf-8"); // Mengonversi Buffer ke string
       }
+
+      // Menormalkan path gambar (menghapus 'uploads/' dan memastikan pemisah direktori yang konsisten)
+      return imagePath.replace(/uploads[\/\\]/, "").replace(/\\/g, "/");
     });
 
     // Step 4: Bandingkan file di folder dengan file di database dan hapus yang tidak ada di database

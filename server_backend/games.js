@@ -134,6 +134,7 @@ router.post(
   }
 );
 
+// Ambil Info semua game (paginasi dan search)
 router.get("/", verifyAdminRole, async (req, res) => {
   const { genre, platform, sort, page = 1, limit = 16 } = req.query; // Page dan limit selalu otomatis ada
   const offset = (page - 1) * limit; // Menghitung offset untuk pagination
@@ -203,6 +204,41 @@ router.get("/", verifyAdminRole, async (req, res) => {
     res.status(500).json({ message: "Terjadi kesalahan pada server" });
   }
 });
+
+// Endpoint untuk mengambil informasi game berdasarkan gameId
+router.get("/getGames/:gameId", verifyAdminRole, async (req, res) => {
+  const { gameId } = req.params;
+
+  try {
+    // Query untuk mendapatkan data game berdasarkan gameId
+    const sql = "SELECT * FROM games WHERE game_id = ?";
+    const [game] = await db.query(sql, [gameId]);
+
+    // Cek apakah game ditemukan
+    if (game.length === 0) {
+      return res.status(404).json({ message: "Game tidak ditemukan" });
+    }
+
+    // Mengembalikan data game
+    res.status(200).json(game[0]);
+  } catch (error) {
+    console.error("Terjadi kesalahan:", error);
+    res.status(500).json({ message: "Terjadi kesalahan pada server" });
+  }
+});
+
+// Helper function untuk menghapus gambar lama
+const deleteOldImage = (oldImage, newImage) => {
+  if (oldImage && newImage && oldImage !== newImage) {
+    fs.unlink(path.join(__dirname, "uploads", oldImage), (err) => {
+      if (err) {
+        console.error("Gagal menghapus file gambar lama:", err);
+      } else {
+        console.log("File gambar lama berhasil dihapus");
+      }
+    });
+  }
+};
 
 // Endpoint untuk mengupdate game berdasarkan ID
 router.put(

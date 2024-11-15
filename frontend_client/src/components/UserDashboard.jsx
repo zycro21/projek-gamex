@@ -14,9 +14,8 @@ const UsersDashboard = () => {
 
   const fetchUsers = async () => {
     try {
-      const token = localStorage.getItem("token");
       const response = await axios.get("http://localhost:5000/admin/users", {
-        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true, // Mengizinkan pengiriman cookies di permintaan
       });
       setUsers(response.data);
     } catch (error) {
@@ -30,9 +29,8 @@ const UsersDashboard = () => {
 
   const handleDelete = async (userId) => {
     try {
-      const token = localStorage.getItem("token");
       await axios.delete(`http://localhost:5000/admin/users/${userId}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true, // Mengizinkan pengiriman cookies di permintaan
       });
       fetchUsers(); // Refresh the user list
       toast.success("User deleted successfully");
@@ -46,12 +44,11 @@ const UsersDashboard = () => {
     e.preventDefault();
     const { user_id, email, username } = selectedUser;
     try {
-      const token = localStorage.getItem("token");
       await axios.put(
         `http://localhost:5000/admin/users/${user_id}`,
         { email, username },
         {
-          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true, // Mengizinkan pengiriman cookies di permintaan
         }
       );
       fetchUsers();

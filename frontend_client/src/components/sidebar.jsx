@@ -1,5 +1,6 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 import "../styles/sidebar.css";
 
 const Sidebar = () => {
@@ -7,7 +8,10 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    // Menghapus token dari cookie
+    Cookies.remove("token");
+
+    // Redirect ke halaman login
     navigate("/login");
   };
 
@@ -114,10 +118,7 @@ const Sidebar = () => {
             </Link>
           </li>
           <li className="logoutcontainer">
-            <Link
-              to="/login"
-              onClick={handleLogout}
-            >
+            <Link to="/login" onClick={handleLogout}>
               <img
                 src="/logo-logout.png"
                 alt="Logo LogOut"

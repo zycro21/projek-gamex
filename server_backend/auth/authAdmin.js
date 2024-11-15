@@ -4,9 +4,10 @@ const db = require("../db");
 require("dotenv").config();
 const JWT_ADMIN = process.env.JWT_ADMIN;
 
-// Middleware untuk memeriksa token admin
+// Middleware untuk memeriksa token admin dari cookies
 const verifyAdminRole = async (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  // Ambil token dari cookie
+  const token = req.cookies.token;
   if (!token) {
     return res.status(401).json({ message: "Token tidak ditemukan" }); // Unauthorized
   }
