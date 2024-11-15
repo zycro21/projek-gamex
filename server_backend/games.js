@@ -256,7 +256,7 @@ router.put(
       .withMessage("Deskripsi game tidak boleh kosong"),
     body("price")
       .optional()
-      .isFloat({ gt: 0 })
+      .isFloat({ min: 0 })
       .withMessage("Harga game harus lebih besar dari 0"),
     body("platform")
       .optional()

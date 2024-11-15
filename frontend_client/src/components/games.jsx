@@ -23,9 +23,7 @@ const GamesDashboard = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const pageFromURL = parseInt(queryParams.get("page") || 1, 10);
-  const limitFromURL = parseInt(queryParams.get("limit") || 16, 10);
 
-  const [gameId, setGameId] = useState(null);
   const [newGame, setNewGame] = useState({
     title: "",
     genre: [],
@@ -169,7 +167,7 @@ const GamesDashboard = () => {
     formData.append("price", newGame.price); // Menambahkan harga
     formData.append("platform", newGame.platform); // Menambahkan platform
     formData.append("genre", newGame.genre); // Menambahkan genre
-    formData.append("release_date", newGame.release_date); // Menambahkan tanggal rilis
+    formData.append("release_date", newGame.releaseDate); // Menambahkan tanggal rilis
     if (newGame.image) {
       formData.append("image", newGame.image); // Menambahkan gambar jika ada
     }
@@ -198,13 +196,16 @@ const GamesDashboard = () => {
         release_date: "",
         image: null,
       });
+      // Menampilkan notifikasi berhasil
+      toast.success("Game berhasil ditambahkan!");
       console.log(response.data.message); // Tampilkan pesan sukses dari server
     } catch (error) {
       console.error(
         "Error adding game:",
         error.response ? error.response.data : error
       );
-      alert("Gagal menambahkan game. Silakan coba lagi.");
+      // Menampilkan notifikasi gagal
+      toast.error("Gagal menambahkan game. Silakan coba lagi.");
     }
   };
 
@@ -353,10 +354,10 @@ const GamesDashboard = () => {
     setIsCreatingNewGame(true); // Menandakan kita sedang membuat game baru
     setNewGame({
       title: "",
-      genre: "",
+      genre: [],
       description: "",
       price: "",
-      platform: "",
+      platform: [],
       releaseDate: "",
       image: null,
     });

@@ -1,6 +1,12 @@
 const fs = require("fs");
 const path = require("path");
 const db = require("../db"); // Sesuaikan dengan path relatif ke db.js
+const readline = require("readline");
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
 
 async function findOrphanedFiles() {
   try {
@@ -34,22 +40,33 @@ async function findOrphanedFiles() {
       return !filesInDatabase.includes(normalizedFile);
     });
 
-    // Step 5: Hapus file yang tidak ada di database
-    orphanedFiles.forEach((file) => {
-      const filePath = path.join(uploadsFolder, file);
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.error(`Gagal menghapus file: ${filePath}`, err);
-        } else {
-          console.log(`File berhasil dihapus: ${filePath}`);
-        }
-      });
-    });
-
-    // Hasil
+    // Step 5: Jika ada file yang tidak ada di database, konfirmasi untuk menghapusnya
     if (orphanedFiles.length > 0) {
-      console.log("File berikut tidak ada di database dan telah dihapus:");
-      console.log(orphanedFiles);
+      console.log("File berikut tidak ada di database dan akan dihapus:");
+      orphanedFiles.forEach((file, index) => {
+        console.log(`${index + 1}. ${file}`);
+      });
+
+      rl.question(
+        "Apakah Anda yakin ingin menghapus file-file ini? (y/n): ",
+        (answer) => {
+          if (answer.toLowerCase() === "y") {
+            orphanedFiles.forEach((file) => {
+              const filePath = path.join(uploadsFolder, file);
+              fs.unlink(filePath, (err) => {
+                if (err) {
+                  console.error(`Gagal menghapus file: ${filePath}`, err);
+                } else {
+                  console.log(`File berhasil dihapus: ${filePath}`);
+                }
+              });
+            });
+          } else {
+            console.log("Pembatalan penghapusan file.");
+          }
+          rl.close();
+        }
+      );
     } else {
       console.log("Semua file di folder 'uploads' tercatat dalam database.");
     }
