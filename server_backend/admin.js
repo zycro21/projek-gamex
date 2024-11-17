@@ -88,9 +88,9 @@ router.post(
       // Simpan token di dalam httpOnly cookie
       res.cookie("token", token, {
         httpOnly: true,
-        secure: false, // Aktifkan hanya jika menggunakan HTTPS
+        secure: false, // Buat true jika menggunakan HTTPS
         sameSite: "Strict", // Melindungi dari serangan CSRF
-        maxAge: 3600000, // 1 jam
+        maxAge: 6 * 60 * 60 * 1000, // 6 jam dalam milidetik
       });
 
       res.status(200).json({ message: "Login Berhasil" });

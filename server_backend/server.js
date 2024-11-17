@@ -6,6 +6,7 @@ const userRoutes = require("./user"); // Mengimpor file user.js
 const adminRoutes = require("./admin");
 const superadminRoutes = require("./superadmin");
 const gamesRoutes = require("./games");
+const reviewRoutes = require("./review")
 const cookieParser = require("cookie-parser");
 
 const app = express();
@@ -34,6 +35,7 @@ app.use("/admin", adminRoutes);
 app.use("/superadmin", superadminRoutes);
 app.use("/games", gamesRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/review", reviewRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

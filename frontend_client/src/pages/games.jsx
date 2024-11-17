@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom"; // Add useLocation here
 import axios from "axios";
-import Sidebar from "./sidebar";
+import Sidebar from "../components/sidebar";
 import "../styles/games.css"; // Your custom CSS styles
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,11 +19,6 @@ const GamesDashboard = () => {
   const [currentGameId, setCurrentGameId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const navigate = useNavigate();
-  const location = useLocation();
-  const queryParams = new URLSearchParams(location.search);
-  const pageFromURL = parseInt(queryParams.get("page") || 1, 10);
-
   const [newGame, setNewGame] = useState({
     title: "",
     genre: [],
@@ -34,74 +29,10 @@ const GamesDashboard = () => {
     image: null,
   });
 
-  // Fetch games function
-  const fetchGames = async (page = currentPage) => {
-    try {
-      const response = await axios.get(
-        `http://localhost:5000/games?page=${page}&limit=${gamesPerPage}`,
-        {
-          withCredentials: true, // Mengizinkan pengiriman cookies di permintaan
-        }
-      );
-      console.log("API Response:", response.data);
-      setGames(response.data.games);
-      setTotalGames(response.data.totalGames);
-      setTotalPages(response.data.totalPages);
-    } catch (error) {
-      console.error(
-        "Error fetching games:",
-        error.response ? error.response.data : error.message
-      );
-    }
-  };
-
-  useEffect(() => {
-    if (pageFromURL !== currentPage) {
-      setCurrentPage(pageFromURL);
-    } else {
-      fetchGames(pageFromURL);
-    }
-  }, [location.search]);
-
-  useEffect(() => {
-    console.log("Current Page:", currentPage);
-    fetchGames(currentPage); // Fetch games when currentPage changes
-  }, [currentPage]);
-
-  // Pagination Logic
-  const handlePageChange = (pageNumber) => {
-    console.log("Page changed to:", pageNumber);
-    setCurrentPage(pageNumber); // Update state currentPage
-    navigate(`/games?page=${pageNumber}&limit=${gamesPerPage}`); // Update URL
-  };
-
-  // Function to fetch game data based on gameId
-  useEffect(() => {
-    const fetchGameData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:5000/games/getGame/${currentGameId}`
-        );
-        const gameData = response.data;
-
-        setNewGame({
-          title: gameData.title,
-          description: gameData.description,
-          price: gameData.price,
-          genre: gameData.genre ? gameData.genre.split(",") : [], // split to array
-          platform: gameData.platform ? gameData.platform.split(",") : [], // split to array
-          releaseDate: gameData.release_date,
-          image: null, // Image set to null initially for update
-        });
-      } catch (error) {
-        console.error("Failed to fetch game data:", error);
-      }
-    };
-
-    if (currentGameId) {
-      fetchGameData();
-    }
-  }, [currentGameId]);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const pageFromURL = parseInt(queryParams.get("page") || 1, 10);
 
   const validGenres = [
     "Real-Time Strategy",
@@ -129,7 +60,34 @@ const GamesDashboard = () => {
     "Virtual Reality (VR)",
   ];
 
-  // Function to handle checkbox change
+  // Fetch games based on page number
+  const fetchGames = async (page = currentPage) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/games?page=${page}&limit=${gamesPerPage}`,
+        {
+          withCredentials: true, // Mengizinkan pengiriman cookies di permintaan
+        }
+      );
+      setGames(response.data.games);
+      setTotalGames(response.data.totalGames);
+      setTotalPages(response.data.totalPages);
+    } catch (error) {
+      console.error(
+        "Error fetching games:",
+        error.response ? error.response.data : error.message
+      );
+    }
+  };
+
+  // Handle page change for pagination
+  const handlePageChange = (pageNumber) => {
+    console.log("Page changed to:", pageNumber);
+    setCurrentPage(pageNumber); // Update state currentPage
+    navigate(`/games?page=${pageNumber}&limit=${gamesPerPage}`); // Update URL
+  };
+
+  // Handle input change for new or existing game form
   const handleGameChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -157,6 +115,7 @@ const GamesDashboard = () => {
     setNewGame((prev) => ({ ...prev, image: file }));
   };
 
+  // Handle adding new game
   const handleAddGame = async (e) => {
     e.preventDefault();
 
@@ -209,6 +168,7 @@ const GamesDashboard = () => {
     }
   };
 
+  // Handle editing an existing game
   const handleUpdateGame = async (e) => {
     e.preventDefault();
     const formData = new FormData();
@@ -268,6 +228,7 @@ const GamesDashboard = () => {
     }
   };
 
+  // Handle Detail Game (belum digunakan)
   const handleDetailGame = async (gameId) => {
     try {
       const response = await axios.get(
@@ -290,6 +251,7 @@ const GamesDashboard = () => {
     }
   };
 
+  // Handle deleting a game
   const handleDeleteGame = async (gameId) => {
     const result = await Swal.fire({
       title: "Apakah Anda yakin?",
@@ -322,6 +284,7 @@ const GamesDashboard = () => {
     }
   };
 
+  // Handle editing an existing game (form pop-up)
   const handleEditGame = (gameId) => {
     setIsCreatingNewGame(false);
     setCurrentGameId(gameId);
@@ -349,7 +312,7 @@ const GamesDashboard = () => {
     }
   };
 
-  // Handle tombol create new game
+  // Handle create new game (pop-up form)
   const handleCreateNewGame = () => {
     setIsCreatingNewGame(true); // Menandakan kita sedang membuat game baru
     setNewGame({
@@ -364,6 +327,7 @@ const GamesDashboard = () => {
     setIsModalOpen(true); // Menampilkan modal
   };
 
+  // Close Pop-Up
   const handleCancelEdit = () => {
     setIsModalOpen(false); // Tutup pop-up tanpa menyimpan perubahan
     setNewGame({
@@ -377,11 +341,48 @@ const GamesDashboard = () => {
     });
   };
 
-  function formatPrice(price) {
-    return price <= 0
-      ? "FREE"
-      : `Rp${Math.floor(price).toLocaleString("id-ID")}`;
-  }
+  const formatPrice = (price) =>
+    price <= 0 ? "FREE" : `Rp${Math.floor(price).toLocaleString("id-ID")}`;
+
+  useEffect(() => {
+    if (pageFromURL !== currentPage) {
+      setCurrentPage(pageFromURL);
+    } else {
+      fetchGames(pageFromURL);
+    }
+  }, [location.search]);
+
+  useEffect(() => {
+    fetchGames(currentPage); // Fetch games when currentPage changes
+  }, [currentPage]);
+
+  // Function to fetch game data based on gameId
+  useEffect(() => {
+    const fetchGameData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/games/getGame/${currentGameId}`
+        );
+        const gameData = response.data;
+
+        setNewGame({
+          title: gameData.title,
+          description: gameData.description,
+          price: gameData.price,
+          genre: gameData.genre ? gameData.genre.split(",") : [], // split to array
+          platform: gameData.platform ? gameData.platform.split(",") : [], // split to array
+          releaseDate: gameData.release_date,
+          image: null, // Image set to null initially for update
+        });
+      } catch (error) {
+        console.error("Failed to fetch game data:", error);
+      }
+    };
+
+    if (currentGameId) {
+      fetchGameData();
+    }
+  }, [currentGameId]);
 
   return (
     <div className="games-dashboard">

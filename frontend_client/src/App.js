@@ -1,9 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"; // Ganti Switch dengan Routes
-import Register from "./components/Register";
-import Login from "./components/Login";
-import UsersDashboard from "./components/UserDashboard";
-import GamesDashboard from "./components/games";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
+import UsersDashboard from "./pages/UserDashboard";
+import GamesDashboard from "./pages/games";
 
 const App = () => {
   return (
