@@ -82,7 +82,7 @@ router.post(
           role: admin.role,
         },
         JWT_ADMIN,
-        { expiresIn: "1h" }
+        { expiresIn: "6h" }
       );
 
       // Simpan token di dalam httpOnly cookie

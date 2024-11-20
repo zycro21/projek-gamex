@@ -7,6 +7,8 @@ const adminRoutes = require("./admin");
 const superadminRoutes = require("./superadmin");
 const gamesRoutes = require("./games");
 const reviewRoutes = require("./review")
+const orderRoutes = require("./order");
+const wishlistRoutes = require("./wishlist")
 const cookieParser = require("cookie-parser");
 
 const app = express();
@@ -36,6 +38,8 @@ app.use("/superadmin", superadminRoutes);
 app.use("/games", gamesRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.use("/review", reviewRoutes);
+app.use("/order", orderRoutes);
+app.use("/wishlist", wishlistRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
