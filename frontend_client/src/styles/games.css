@@ -72,6 +72,7 @@
   margin-left: 15px; /* Jarak antara ikon dan teks saat dihover */
   position: relative; /* Posisikan teks relatif terhadap tombol */
 }
+
 .main-content-games {
   margin-left: 250px; /* Menyisakan ruang untuk sidebar */
   padding-left: 20px;

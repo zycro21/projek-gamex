@@ -81,7 +81,7 @@ const Sidebar = () => {
           <li>
             <Link
               to="/reviews"
-              className={location.pathName === "/reviews" ? "active" : ""}
+              className={location.pathname === "/reviews" ? "active" : ""}
             >
               <img
                 src="/logo-review.png"
@@ -93,15 +93,15 @@ const Sidebar = () => {
           </li>
           <li>
             <Link
-              to="/articles"
-              className={location.pathname === "/articles" ? "active" : ""}
+              to="/wishlist"
+              className={location.pathname === "/wishlist" ? "active" : ""}
             >
               <img
                 src="/logo-artikel.jpg"
                 alt="Logo Artikel"
                 className="menu-icon"
               ></img>
-              Article
+              Wishlist
             </Link>
           </li>
           <li>

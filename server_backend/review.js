@@ -90,10 +90,12 @@ router.post("/createReviews", verifyAdminRole, async (req, res, next) => {
 
 // Fetch All Review (Pagination and Search)
 router.get("/", verifyAdminRole, async (req, res) => {
-  const { page = 1, limit = 10, search = "" } = req.query;
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 10;
+  const search = req.query.search || "";
 
   // Validasi 1: Pastikan parameter query page dan limit adalah angka positif
-  if (isNaN(page) || isNaN(limit) || page <= 0 || limit <= 0) {
+  if (page <= 0 || limit <= 0) {
     return res.status(400).json({
       message: "Page dan Limit harus angka positif",
     });

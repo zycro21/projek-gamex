@@ -33,7 +33,7 @@
   overflow-y: auto;
   scrollbar-width: thin;
   height: calc(100vh - 20px);
-  /* background-color: blueviolet; */
+ /* background-color: blueviolet; */
 }
 
 .user-table {

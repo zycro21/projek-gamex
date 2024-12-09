@@ -4,6 +4,8 @@ import Register from "./pages/Register";
 import Login from "./pages/Login";
 import UsersDashboard from "./pages/UserDashboard";
 import GamesDashboard from "./pages/games";
+import ReviewDashboard from "./pages/Review";
+import WishlistDashboard from "./pages/Wishlist";
 
 const App = () => {
   return (
@@ -13,6 +15,8 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/users" element={<UsersDashboard />} />
         <Route path="/games" element={<GamesDashboard />} />
+        <Route path="/reviews" element={<ReviewDashboard />} />
+        <Route path="/wishlist" element={<WishlistDashboard />} />
         <Route path="/" element={<Login />} /> {/* Default ke login */}
       </Routes>
     </Router>

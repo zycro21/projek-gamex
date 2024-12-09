@@ -1,0 +1,399 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bungee&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+.review-dashboard {
+  /* background-color: red; */
+  font-family: "Poppins", sans-serif;
+  padding-top: 5px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.review-title-container {
+  /* background-color: blue; */
+  margin-left: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 30px;
+}
+
+.review-title {
+  /* background-color: aqua; */
+  font-size: 24px;
+  color: #4682b4;
+}
+
+.add-review-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  transition: width 0.3s ease, background-color 0.2s ease;
+  position: relative;
+}
+
+.add-review-button:hover {
+  background-color: #0056b3;
+  width: 200px;
+}
+
+.icon {
+  font-size: 14px;
+  visibility: visible;
+  opacity: 1;
+}
+
+.button-text-add-reviews {
+  /* background-color: ; */
+  opacity: 0;
+  margin-left: 5px;
+  white-space: nowrap;
+  transition: opacity 0.3s ease;
+  visibility: hidden;
+  position: absolute;
+}
+
+.add-review-button:hover .button-text-add-reviews {
+  opacity: 1;
+  visibility: visible;
+  margin-left: 15px;
+  position: relative;
+}
+
+/* Loading dan Error pesan */
+.loading-review {
+  text-align: center;
+  font-size: 16px;
+}
+
+/* Konten Utama */
+.main-content-reviews {
+  background-color: #f8f9fa;
+  margin-left: 250px;
+  padding: 10px;
+  padding-top: 0px;
+  border-radius: 20px;
+}
+
+.review-table {
+  /* background-color: red; */
+  width: 100%;
+  border-collapse: collapse;
+  overflow-y: auto;
+  margin-bottom: 20px;
+}
+
+.review-table thead {
+  position: sticky;
+  top: 0;
+  background-color: #f8f9fa;
+  z-index: 1;
+}
+
+.review-table th,
+.review-table td {
+  border: none;
+  padding: 13px;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+}
+
+.review-table .rating-column {
+  text-align: center;
+}
+
+/* tombol action */
+.review-action-button {
+  display: flex;
+  gap: 10px;
+}
+
+.review-edit-button {
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.review-edit-button:hover {
+  background-color: #0056b3;
+}
+
+.review-delete-button {
+  padding: 8px 12px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.review-delete-button:hover {
+  background-color: #c82333;
+}
+
+/* Pop Up Form */
+/* Modal Content (Background Overlay) */
+.review-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  /* background-color: red; */
+}
+
+/* Modal Content (Container Form) */
+.review-modal-content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  max-width: 90%;
+}
+
+/* Judul Modal */
+.review-modal-content h2 {
+  margin: 0 0 20px;
+  font-size: 1.5rem;
+  /* text-align: center; */
+}
+
+.review-modal-content label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.review-modal-content input,
+.review-modal-content textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.review-modal-actions {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.review-confirm-btn,
+.review-cancel-btn {
+  padding: 8px 15px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.review-confirm-btn {
+  background-color: #4caf50;
+  color: white;
+}
+
+.review-confirm-btn:hover {
+  background-color: #45a049;
+}
+
+.review-cancel-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.review-cancel-btn:hover {
+  background-color: #d32f2f;
+}
+
+/* Pop-Up Pilih Game untuk direview */
+/* Modal Container */
+.review-game-popup-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.review-game-popup-modal-content {
+  background-color: #fff;
+  width: 80%;
+  max-width: 600px;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: left;
+  position: relative;
+}
+
+.review-game-popup-modal-content h2 {
+  font-size: 24px;
+  color: #333;
+  margin-top: 0px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.review-game-popup-modal-content ul {
+  list-style-type: none;
+  margin: 0;
+  max-height: 300px;
+  overflow-y: auto;
+  /* overflow-x: hidden; */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+}
+
+.review-game-popup-modal-content ul li {
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
+  margin-bottom: 5px;
+  padding: 8px;
+  border: 1px solid #f0f0f0;
+  border-radius: 4px;
+  background-color: #fafafa;
+  gap: 109px;
+}
+
+.review-game-item {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  flex: 2;
+}
+
+.review-game-id {
+  font-size: 14px;
+  color: #777;
+  /* margin-left: 14px; */
+  flex: 1;
+  text-align: center;
+}
+
+.review-game-popup-modal-content ul li button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  margin-top: 5px;
+  flex-shrink: 0;
+}
+
+.review-game-popup-modal-content ul li button:hover {
+  background-color: #0056b3;
+}
+
+.review-game-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  gap: 50px;
+}
+
+.review-game-pagination button {
+  background-color: #007bff;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.review-game-pagination button[disabled] {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.review-game-pagination button:hover:not([disabled]) {
+  background-color: #0056b3;
+}
+
+.review-game-pagination span {
+  font-size: 14px;
+  color: #555;
+  flex-grow: 1;
+  text-align: center;
+}
+
+/* Tombol Close */
+.review-game-close-btn {
+  margin-top: 10px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.review-game-close-btn:hover {
+  background-color: #e60000;
+}
+
+/* pagination */
+.main-content-reviews-2 {
+  margin-left: 250px;
+  padding-bottom: 50px;
+}
+
+.pagination-review {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination-review button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.pagination-review button:disabled {
+  background-color: #ccc;
+}

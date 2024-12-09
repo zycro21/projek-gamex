@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom"; // Add useLocation here
 import axios from "axios";
-import Sidebar from "../components/sidebar";
-import "../styles/games.css"; // Your custom CSS styles
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Swal from "sweetalert2";
 import { FaPlus } from "react-icons/fa";
+import Sidebar from "../components/sidebar";
+import "../styles/games.css"; // Your custom CSS styles
+
 
 const GamesDashboard = () => {
   const [games, setGames] = useState([]);
