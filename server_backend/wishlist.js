@@ -30,6 +30,7 @@ router.post(
       .withMessage("Kolom title_wishlist wajib diisi"),
   ],
   async (req, res) => {
+    console.log(req.body);
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -154,8 +155,8 @@ router.get("/", verifyAdminRole, async (req, res) => {
     const totalItems = countResult[0].total;
 
     // Perhitungan Total Pages
-    const totalPages = Math.ceil(totalItems/parsedLimit);
-    console.log("Total Pages Calculated: ", totalPages)
+    const totalPages = Math.ceil(totalItems / parsedLimit);
+    console.log("Total Pages Calculated: ", totalPages);
 
     // Query fetch wishlist dengan pagination
     const query = `
@@ -165,7 +166,7 @@ router.get("/", verifyAdminRole, async (req, res) => {
     LIMIT ? OFFSET ?
     `;
 
-    const [wishlistResult]= await db.query(query, [parsedLimit, offset]);
+    const [wishlistResult] = await db.query(query, [parsedLimit, offset]);
 
     res.status(200).json({
       message: "Daftar Wishlist Berhasil Didapatkan",
@@ -248,7 +249,7 @@ router.get("/:wishlist_id", verifyAdminRole, async (req, res) => {
     `;
 
     const countGameResult = await db.query(countGameQuery, [wishlist_id]);
-    const totalGames = countGameQuery.length > 0 ? countGameResult[0].total : 0;
+    const totalGames = countGameResult.length > 0 ? countGameResult[0].total : 0;
 
     // Jika tidak ada game dalam wishlist
     if (gameResult.length === 0) {
@@ -259,7 +260,7 @@ router.get("/:wishlist_id", verifyAdminRole, async (req, res) => {
 
     // Total halaman untuk game
     const totalGamePages =
-      totalGames > 0 ? Math.ceil(totalGames / parsedGameLimit) : 0;
+      totalGames > 0 ? Math.ceil(totalGames / parsedGameLimit) : 1;
 
     res.status(200).json({
       message: "Berhasil mendapatkan detail wishlist",
@@ -496,7 +497,7 @@ router.delete("/:wishlist_id", verifyAdminRole, async (req, res) => {
       message: `Data wishlist dengan ID ${wishlist_id} dan semua game terkait berhasil dihapus`,
     });
   } catch (err) {
-    console.error(err)
+    console.error(err);
     return res.status(500).json({
       message: "Gagal menghapus data wishlist",
       error: err.message,
