@@ -1,0 +1,141 @@
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bungee&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap");
+
+.maindashboard-content-1 {
+  font-family: "Poppins", sans-serif;
+  padding-top: 5px;
+  padding-bottom: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+.dashboard-header-container {
+  margin-left: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-right: 30px;
+}
+
+.dashboard-title {
+  font-size: 24px;
+  color: #4682b4;
+}
+
+/* Charts Container */
+.maindashboard-content-2 {
+  margin-left: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 10px;
+  padding-bottom: 30px;
+  padding-right: 30px;
+  /* background-color: #333333; */
+}
+
+.dashboard-charts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  animation: slideUp 0.8s ease-in-out;
+}
+
+/* Individual Chart Container */
+.chart-container {
+  max-width: 600px; /* Batas maksimum lebar */
+  max-height: 400px; /* Batas maksimum tinggi */
+  margin: 20px auto; /* Centering */
+  background: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.chart-container:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.chart-title {
+  font-size: 1.5rem;
+  color: #333333;
+  margin-bottom: 15px;
+  position: relative;
+  animation: fadeIn 1s ease-in-out;
+}
+
+.chart-title::after {
+  content: "";
+  display: block;
+  width: 50px;
+  height: 3px;
+  background: #4f46e5;
+  margin-top: 5px;
+  border-radius: 3px;
+  animation: growLine 0.5s ease-in-out;
+}
+
+/* Toast Notification */
+.Toastify_toast {
+  font-size: 1rem;
+  border-radius: 8px;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.Toastify_toast--success {
+  background: #4caf50;
+}
+
+.Toastify_toast--error {
+  background: #f44336;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes growLine {
+  from {
+    width: 0;
+  }
+  to {
+    width: 50px;
+  }
+}

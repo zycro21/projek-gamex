@@ -87,7 +87,6 @@ router.post("/createReviews", verifyAdminRole, async (req, res, next) => {
   }
 });
 
-
 // Fetch All Review (Pagination and Search)
 router.get("/", verifyAdminRole, async (req, res) => {
   const page = parseInt(req.query.page, 10) || 1;
@@ -148,6 +147,41 @@ router.get("/", verifyAdminRole, async (req, res) => {
   }
 });
 
+// Get Distribusi Rating per Game
+router.get("/ratings-distribution", verifyAdminRole, async (req, res) => {
+  try {
+    const query = `SELECT game_id, rating, COUNT(*) AS count FROM reviews GROUP BY game_id, rating ORDER BY game_id ASC, rating ASC`;
+
+    const [results] = await db.query(query);
+
+    // Transform Hasil Query menjadi Struktur yang rapi
+    const distribution = {};
+
+    results.forEach((row) => {
+      const { game_id, rating, count } = row;
+      if (!distribution[game_id]) {
+        distribution[game_id] = Array(10).fill(0);
+      }
+
+      const index = Math.floor(rating) - 1;
+      if (index >= 0 && index < 10) {
+        distribution[game_id][index] += count;
+      }
+    });
+
+    res.status(200).json({
+      message: "Distribusi Rating Per Game Berhasil Diambil",
+      data: distribution,
+    });
+  } catch (err) {
+    console.error("Database Error: ", err);
+    res.status(500).json({
+      message: "Gagal Mengambil Data Distribusi Rating Per Game",
+      error: err,
+    });
+  }
+});
+
 // Fetch Review Detail (By Detail ID)
 router.get("/:review_id", verifyAdminRole, async (req, res) => {
   const { review_id } = req.params; // Mengambil review_id dari parameter URL
@@ -194,7 +228,6 @@ router.get("/:review_id", verifyAdminRole, async (req, res) => {
     });
   }
 });
-
 
 // Memperbarui Review berdasarkan review_id (walaupun endpoint ini cenderung tidak akan digunakan)
 router.put("/:review_id", verifyAdminRole, async (req, res) => {
@@ -299,7 +332,6 @@ router.put("/:review_id", verifyAdminRole, async (req, res) => {
     });
   }
 });
-
 
 // Menghapus Review
 router.delete("/:review_id", verifyAdminRole, async (req, res) => {

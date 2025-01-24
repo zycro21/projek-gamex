@@ -190,24 +190,6 @@
   margin-right: 10px;
 }
 
-@keyframes pulse {
-  0% {
-    opacity: 0.6;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0.6;
-  }
-}
-
-@keyframes spin {
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
 /* Konten Utama */
 .main-content-wishlist {
   background-color: #f8f9fa;
@@ -377,7 +359,6 @@
   border-radius: 5px;
   cursor: pointer;
   transition: background 0.3s;
-  
 }
 
 .wishlist-games-pagination button:disabled {
@@ -408,24 +389,299 @@
   background: #cc0000;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+/* Pop Up Edit Wishlist */
+.edit-wishlist-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: fadeIn 0.3s ease-in-out;
 }
 
-@keyframes slideIn {
-  from {
-    transform: translateY(-50px);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
+.edit-wishlist-popup {
+  background: #ffffff;
+  border-radius: 12px;
+  width: 400px;
+  padding: 20px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  position: relative;
+  animation: slideIn 0.4s ease-in-out;
+  overflow: hidden;
+}
+
+.edit-wishlist-popup h2 {
+  margin: 0 0 20px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+}
+
+.edit-wishlist-popup input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.edit-wishlist-popup button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  margin: 10px 5px 0;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.edit-wishlist-popup button:hover {
+  background-color: #0056b3;
+  transform: translateY(-3px);
+}
+
+.edit-wishlist-popup button:active {
+  transform: translateY(0);
+}
+
+.edit-wishlist-popup ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.edit-wishlist-popup ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.edit-wishlist-popup ul li button {
+  background: #ff4d4d;
+  border: none;
+  padding: 5px 10px;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.3s ease;
+}
+
+.edit-wishlist-popup ul li button:hover {
+  background: #c60000;
+}
+
+.edit-wishlist-popup-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.edit-wishlist-confirm-button {
+  background: #28a745;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-wishlist-confirm-button:hover {
+  background: #218838;
+}
+
+.edit-wishlist-cancel-button {
+  background: #dc5345;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-wishlist-cancel-button:hover {
+  background: #c82333;
+}
+
+/* Pop Up Game Edit Wishlist */
+.game-edit-wishlist-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+.game-edit-wishlist-popup {
+  background: linear-gradient(135deg, #ffffff, #f9f9f9);
+  width: 600px;
+  max-height: 80vh;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  overflow-y: auto;
+  transform: scale(0.9);
+  animation: zoomBounce 0.6s ease-out forwards;
+}
+
+.game-edit-wishlist-popup h2 {
+  font-size: 26px;
+  margin-bottom: 15px;
+  color: #333;
+  text-align: center;
+  animation: slideIn 0.8s ease-in-out;
+}
+
+.game-edit-wishlist-popup h2::after {
+  content: "";
+  width: 50px;
+  height: 3px;
+  background: #007bff;
+  display: block;
+  margin: 10px auto 0;
+  animation: growWidth 0.6s ease-in-out;
+}
+
+.game-edit-wishlist-game-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.game-edit-wishlist-game-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 10px;
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+  background-color: #fff;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  animation: listItemFadeIn 0.5s ease-in-out;
+}
+
+.game-edit-wishlist-game-list li:hover {
+  background-color: #eaf4ff;
+  transform: translateY(-2px);
+}
+
+.game-number {
+  font-size: 16px;
+  color: #555;
+  width: 30px;
+  text-align: center;
+}
+
+.game-title {
+  flex-grow: 1;
+  font-size: 16px;
+  color: #333;
+  text-align: left;
+  padding-left: 10px;
+}
+
+.game-edit-wishlist-add-button {
+  background: #007bff;
+  border: none;
+  padding: 8px 12px;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  min-width: 70px;
+  text-align: center;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.game-edit-wishlist-add-button:hover {
+  background: #0056b3;
+  transform: scale(1.1);
+}
+
+.game-edit-wishlist-popup-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding: 10px;
+  background: #f1f1f1;
+  border-radius: 10px;
+  animation: slideIn 0.5s ease-in-out;
+}
+
+.game-edit-wishlist-popup-pagination .game-edit-wishlist-pagination-button {
+  background: #28a745;
+  border: none;
+  color: #fff;
+  padding: 10px 15px;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.game-edit-wishlist-popup-pagination .game-edit-wishlist-pagination-button:hover {
+  background: #218838;
+  transform: scale(1.1);
+}
+
+.game-edit-wishlist-popup-pagination .game-edit-wishlist-pagination-button:disabled {
+  background: #d4d4d4;
+  color: #777;
+  cursor: not-allowed;
+}
+
+.game-edit-wishlist-popup-pagination .game-edit-wishlist-popup-indicator {
+  font-size: 14px;
+  font-weight: bold;
+  color: #555;
+}
+
+.game-edit-wishlist-close-button {
+  width: 100%;
+  margin-top: 20px;
+  padding: 10px 15px;
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.game-edit-wishlist-close-button:hover {
+  background: #c82333;
+  transform: scale(1.05);
+}
+
+.game-edit-wishlist-popup::-webkit-scrollbar {
+  width: 8px;
+}
+
+.game-edit-wishlist-popup::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.game-edit-wishlist-popup::-webkit-scrollbar-thumb:hover {
+  background: #999;
 }
 
 /* Pagination Utama */
@@ -453,4 +709,65 @@
 
 .wishlist-pagination button:disabled {
   background-color: #ccc;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes zoomBounce {
+  0% {
+    transform: scale(0.9);
+  }
+  60% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(-50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes listItemFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

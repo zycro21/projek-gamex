@@ -392,7 +392,13 @@ router.get("/:order_id", verifyAdminRole, async (req, res) => {
       message: "Berhasil mendapakan detail order",
       orderDetails,
     });
-  } catch (err) {}
+  } catch (err) {
+    console.error("Error fetching order details: ", err);
+    res.status(500).json({
+      message: "Terjadi kesalahan saat mengambil data order",
+      error: err.message, // Untuk memberikan detail error pada respons
+    });
+  }
 });
 
 // Update Data Order

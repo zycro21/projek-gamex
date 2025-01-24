@@ -9,6 +9,7 @@ import Sidebar from "../components/sidebar";
 import "../styles/Wishlist.css";
 
 const WishlistDashboard = () => {
+  // State untuk Fetch Wishlist
   const [wishlists, setWishlists] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -32,6 +33,18 @@ const WishlistDashboard = () => {
   const [gameDetailCurrentPage, setGameDetailCurrentPage] = useState(1);
   const [gameDetailTotalPages, setGameDetailTotalPages] = useState(1);
   const [detailLoading, setDetailLoading] = useState(false);
+
+  // State untuk edit wishlist
+  const [showEditWishlistPopup, setShowEditWishlistPopup] = useState(false);
+  const [editFormWishlistData, setEditFormWishlistData] = useState({
+    title_wishlist: "",
+    selectedGames: [],
+  });
+  const [selectedGamesIds, setSelectedGameIds] = useState([]);
+  const [availableGames, setAvailableGames] = useState([]);
+  const [gameSelectPopupVisible, setGameSelectPopupVisible] = useState(false);
+  const [gameWishlistCurrentPage, setGameWishlistCurrentPage] = useState(1);
+  const [gameWishlistTotalPage, setGameWishlistTotalPage] = useState(1);
 
   const navigate = useNavigate();
 
@@ -117,7 +130,10 @@ const WishlistDashboard = () => {
 
       setWishlistDetail(wishlist[0]);
 
-      console.log("After setWishlistDetail (state might not update immediately): ", wishlistDetail);
+      console.log(
+        "After setWishlistDetail (state might not update immediately): ",
+        wishlistDetail
+      );
 
       setWishlistGames(response.data.game);
       setGameDetailCurrentPage(metadata.currentGamePage);
@@ -160,7 +176,7 @@ const WishlistDashboard = () => {
     });
   };
 
-  // Fungsi untuk eksekusi create
+  // Fungsi untuk eksekusi create wishlist
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({}); // Reset Error State
@@ -224,6 +240,194 @@ const WishlistDashboard = () => {
   const handlePageChange = (newPage) => {
     if (newPage > 0 && newPage <= totalPages) {
       FetchWishlist(newPage);
+    }
+  };
+
+  // Fungsi Menu Edit
+  // Fungsi Untuk Mengambil data berdasarkan wishlist_id
+  const FetchWishlistEditData = async (wishlistId) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/wishlist/${wishlistId}`,
+        { withCredentials: true }
+      );
+
+      if (response.status === 200) {
+        const wishlistData = response.data.wishlist;
+
+        setEditFormWishlistData({
+          wishlist_id: wishlistData.wishlist_id,
+          title_wishlist: wishlistData.title_wishlist,
+          selectedGames: wishlistData.games || [],
+        });
+
+        // Set State ID Game yang Dipilih
+        setSelectedGameIds(
+          wishlistData.games?.map((game) => game.game_id) || []
+        );
+
+        setShowEditWishlistPopup(true);
+      }
+    } catch (error) {
+      console.error("Error Fetching Wishlist Data: ", error);
+      toast.error("Failed to fetch wishlist data for editing");
+    }
+  };
+
+  // Handle Edit Wishlist Click Button
+  const handleEditWishlistClick = (wishlist) => {
+    FetchWishlistEditData(wishlist.wishlist_id);
+  };
+
+  // Fetch Available Games
+  const FetchAvailableGames = async (page = 1, limit = 16) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/games?page=${page}&limit=${limit}`,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      console.log("Response Data:", response.data);
+
+      const { games, totalPages, currentPage } = response.data;
+
+      if (response.data.games && Array.isArray(response.data.games)) {
+        setAvailableGames(response.data.games);
+        setGameWishlistCurrentPage(response.data.currentPage); // Update current page
+        setGameWishlistTotalPage(response.data.totalPages); // Update total pages
+
+        // Tambahkan log di sini
+        console.log("Available Games:", games);
+        console.log("Current Page:", currentPage);
+        console.log("Total Pages:", totalPages);
+      } else {
+        throw new Error("Invalid API Response Structure");
+      }
+    } catch (error) {
+      console.error("Error Fetching Available Games: ", error);
+      toast.error("Failed to fetch available games");
+    }
+  };
+
+  // Toogle Game Select PopUp Visibility
+  const toogleGameSelectPopup = () => {
+    setGameSelectPopupVisible(!gameSelectPopupVisible);
+
+    // Fetch Game Data when Opening the PopUp
+    if (!gameSelectPopupVisible) {
+      FetchAvailableGames();
+    }
+  };
+
+  // Add Game to Local State
+  const handleEditSelectGame = async (gameId) => {
+    if (!selectedGamesIds.includes(gameId)) {
+      setSelectedGameIds((prev) => [...prev, gameId]);
+    } else {
+      toast.warning("Game Already Added");
+    }
+  };
+
+  // Remove Game from selection (remove game from wishlist)
+  const handleEditRemoveGame = async (gameId) => {
+    setSelectedGameIds((prev) => prev.filter((id) => id !== gameId));
+  };
+
+  // Confirm Edit (Menggabungkan API perubahan title dan Selected Games)
+  const handleConfirmEdit = async () => {
+    const { wishlist_id, title_wishlist } = editFormWishlistData;
+
+    try {
+      // Update Title Jika Berubah
+      if (title_wishlist.trim()) {
+        await axios.put(
+          `http://localhost:5000/wishlist/${wishlist_id}`,
+          { title_wishlist },
+          { withCredentials: true }
+        );
+        console.log("Title Wishlist Berhasil Diupdate");
+      }
+
+      // Update Game (Tambah dan Kurang)
+      // Bandingkan Games di awal dengan games yang sekarang dipilih
+      const initialGameIds = editFormWishlistData.selectedGames.map(
+        (game) => game.game_id
+      );
+      const addedGames = selectedGamesIds.filter(
+        (id) => !initialGameIds.includes(id)
+      );
+      const removedGames = initialGameIds.filter(
+        (id) => !selectedGamesIds.includes(id)
+      );
+
+      // Tambahkan Game Baru Jika Ada
+      if (addedGames.length > 0) {
+        await axios.put(
+          `http://localhost:5000/wishlist/plus/${wishlist_id}`,
+          { game_id: addedGames },
+          { withCredentials: true }
+        );
+        console.log("Game Berhasil Ditambahkan: ", addedGames);
+      }
+
+      // Hapus Game Jika Ada
+      if (removedGames.length > 0) {
+        await axios.put(
+          `http://localhost:5000/wishlist/minus/${wishlist_id}`,
+          { game_id: removedGames },
+          { withCredentials: true }
+        );
+        console.log("Game Berhasil Dihapus: ", removedGames);
+      }
+
+      // Notifikasi Sukses
+      toast.success("Wishlist Berhasil Diperbarui");
+
+      // Fetch Ulang Data Wishlist
+      FetchWishlist();
+    } catch (error) {
+      console.error("Error Confirming Edit: ", error);
+      toast.error(
+        error.response?.data?.message || "Gagal Memperbarui Wishlist"
+      );
+    }
+  };
+
+  // Delete Wishlist
+  const handleDeleteWishlist = async (wishlist_id) => {
+    const result = await Swal.fire({
+      title: "Apakah Anda yakin?",
+      text: "Data wishlist dan semua game terkait akan dihapus secara permanen!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Ya, hapus!",
+      cancelButtonText: "Batal",
+    });
+
+    if (result.isConfirmed) {
+      try {
+        const response = await axios.delete(
+          `http://localhost:5000/wishlist/${wishlist_id}`,
+          { withCredentials: true }
+        );
+
+        if (response.status === 200) {
+          toast.success("Wishlist berhasil dihapus!");
+          FetchWishlist(currentPage);
+        }
+      } catch (error) {
+        console.error("Error deleting wishlist:", error);
+        toast.error(
+          error.response?.data?.message || "Gagal menghapus wishlist."
+        );
+      }
     }
   };
 
@@ -346,10 +550,18 @@ const WishlistDashboard = () => {
                         >
                           <FaEye />
                         </button>
-                        <button className="wishlist-edit-button">
+                        <button
+                          className="wishlist-edit-button"
+                          onClick={() => handleEditWishlistClick(wishlist)}
+                        >
                           <FaEdit />
                         </button>
-                        <button className="wishlist-delete-button">
+                        <button
+                          className="wishlist-delete-button"
+                          onClick={() =>
+                            handleDeleteWishlist(wishlist.wishlist_id)
+                          }
+                        >
                           <FaTrash />
                         </button>
                       </div>
@@ -367,7 +579,7 @@ const WishlistDashboard = () => {
                   {wishlistDetail && (
                     <div className="wishlist-detail">
                       <p>
-                        <strong>Wishlist Title:</strong>
+                        <strong>Wishlist Title:</strong>{" "}
                         {wishlistDetail.title_wishlist}
                       </p>
                       <p>
@@ -444,6 +656,68 @@ const WishlistDashboard = () => {
         </>
       )}
 
+      {/* Edit Wishlist Pop Up */}
+      {showEditWishlistPopup && (
+        <div className="edit-wishlist-popup-overlay">
+          <div className="edit-wishlist-popup">
+            <h2>Edit Wishlist</h2>
+            <input
+              type="text"
+              value={editFormWishlistData.title_wishlist}
+              onChange={(e) =>
+                setEditFormWishlistData((prev) => ({
+                  ...prev,
+                  title_wishlist: e.target.value,
+                }))
+              }
+              placeholder="Enter New Wishlist Title"
+            />
+            <button onClick={toogleGameSelectPopup}>Select Games</button>
+            <div>
+              <h3>Selected Games</h3>
+              <ul>
+                {selectedGamesIds.map((gameId) => (
+                  <li key={gameId}>
+                    {gameId}{" "}
+                    <button onClick={() => handleEditRemoveGame(gameId)}>
+                      Remove
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="edit-wishlist-popup-buttons">
+              <button
+                className="edit-wishlist-confirm-button"
+                onClick={handleConfirmEdit}
+              >
+                Confirm
+              </button>
+              <button
+                className="edit-wishlist-cancel-button"
+                onClick={() => setShowEditWishlistPopup(false)}
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Game Select PopUp */}
+      {gameSelectPopupVisible && (
+        <GameSelectPopUp
+          availableGames={availableGames}
+          onSelectGame={handleEditSelectGame}
+          onClose={toogleGameSelectPopup}
+          gameWishlistCurrentPage={gameWishlistCurrentPage}
+          gameWishlistTotalPage={gameWishlistTotalPage}
+          setGameWishlistCurrentPage={setGameWishlistCurrentPage}
+          FetchAvailableGames={FetchAvailableGames}
+        />
+      )}
+
       <div className="main-content-wishlist-2">
         <div className="wishlist-pagination">
           <button
@@ -462,6 +736,83 @@ const WishlistDashboard = () => {
             Next
           </button>
         </div>
+      </div>
+    </div>
+  );
+};
+
+// Game Select PopUp Component
+const GameSelectPopUp = ({
+  availableGames,
+  onSelectGame,
+  onClose,
+  gameWishlistCurrentPage,
+  gameWishlistTotalPage,
+  setGameWishlistCurrentPage,
+  FetchAvailableGames,
+}) => {
+  // Log sebelum data digunakan di dalam komponen
+  console.log("Available Games:", availableGames);
+  console.log("Current Page:", gameWishlistCurrentPage);
+  console.log("Total Pages:", gameWishlistTotalPage);
+
+  const handleGameNextPage = () => {
+    if (gameWishlistCurrentPage < gameWishlistTotalPage) {
+      const nextPage = gameWishlistCurrentPage + 1;
+      FetchAvailableGames(nextPage);
+    }
+  };
+
+  const handleGamePrevPage = () => {
+    if (gameWishlistCurrentPage > 1) {
+      const prevPage = gameWishlistCurrentPage - 1;
+      FetchAvailableGames(prevPage);
+    }
+  };
+
+  return (
+    <div className="game-edit-wishlist-popup-overlay">
+      <div className="game-edit-wishlist-popup">
+        <h2>Select Game</h2>
+        <ul className="game-edit-wishlist-game-list">
+          {availableGames.map((game, index) => (
+            <li key={game.game_id}>
+              <span className="game-number">
+                {index + 1 + (gameWishlistCurrentPage - 1) * 16}
+              </span>
+              <span className="game-title">{game.title}</span>
+              <button
+                className="game-edit-wishlist-add-button"
+                onClick={() => onSelectGame(game.game_id)}
+              >
+                Add
+              </button>
+            </li>
+          ))}
+        </ul>
+        <div className="game-edit-wishlist-popup-pagination">
+          <button
+            className="game-edit-wishlist-pagination-button"
+            onClick={handleGamePrevPage}
+            disabled={gameWishlistCurrentPage === 1}
+          >
+            Previous
+          </button>
+          <span className="game-edit-wishlist-popup-indicator">
+            Page {gameWishlistCurrentPage} of {gameWishlistTotalPage}
+          </span>
+          <button
+            className="game-edit-wishlist-pagination-button"
+            onClick={handleGameNextPage}
+            disabled={gameWishlistCurrentPage === gameWishlistTotalPage}
+          >
+            Next
+          </button>
+        </div>
+
+        <button onClick={onClose} className="game-edit-wishlist-close-button">
+          Close
+        </button>
       </div>
     </div>
   );
