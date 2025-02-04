@@ -16,7 +16,7 @@ const PORT = 5000;
 
 // Konfigurasi CORS untuk mengizinkan semua origin dan kredensial
 const corsOptions = {
-  origin: 'http://localhost:3000', 
+  origin: 'http://localhost:3000' || "http://localhost:3001", 
   credentials: true, // Mengizinkan pengiriman cookies
 };
 

@@ -58,3 +58,10 @@ Pastikan Anda sudah menginstal Node.js, MySQL, dan NPM di lingkungan Anda.
 
 ## Kontribusi
 Jika Anda ingin melakukan pengembangan sendiri pada Game-X, Anda dipersilakan untuk fork repository ini dan membuat perubahan sesuai kebutuhan Anda. Terima kasih telah tertarik pada proyek ini!
+
+## Example Page
+![Example 1](frontend_client/src/assets/web1.png)
+![Example 2](frontend_client/src/assets/web2.png)
+![Example 3](frontend_client/src/assets/web3.png)
+![Example 4](frontend_client/src/assets/web4.png)
+![Example 5](frontend_client/src/assets/web5.png)
